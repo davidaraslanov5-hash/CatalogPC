@@ -24,17 +24,30 @@ namespace CatalogPC.Models
         {
             if (processors.Count == 0 || motherboards.Count == 0)
             {
-                Console.WriteLine("Нет комплектующих для проверки совместимости.");
+                Console.WriteLine("Нет комплектующих для проверки совместимости");
                 return;
             }
             else if (processor.Socket == motherboard.Socket)
+            {
+                Console.WriteLine("Сокет подходит");
+            }
+            foreach (int i in motherboard.Gen) {
+                if (processor.Gen == i) {
+                    Console.WriteLine("Поколение подходит");
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
         }
 
         public class Processor
         {
             public string Name { get; set; }
             public string Socket { get; set; }
-            public string Gen { get; set; }
+            public int Gen { get; set; }
             public string Frequency { get; set; }
             public string DDR { get; set; }
         }
@@ -43,7 +56,7 @@ namespace CatalogPC.Models
         {
             public string Name { get; set; }
             public string Socket { get; set; }
-            public string Gen { get; set; }
+            public int[] Gen { get; set; }
             public string Frequency { get; set; }
             public string DDR { get; set; }
         }
@@ -53,7 +66,7 @@ namespace CatalogPC.Models
             public string Frequency { get; set; }
             public string DDR { get; set; }
         }
-        public void AddProcessor(string name, string socket, string gen, string frequency, string ddr)
+        public void AddProcessor(string name, string socket, int gen, string frequency, string ddr)
         {
             processors.Add(new Processor
             {
@@ -64,7 +77,7 @@ namespace CatalogPC.Models
                 DDR = ddr
             });
         }
-        public void AddMotherboard(string name, string socket, string gen, string frequency, string ddr)
+        public void AddMotherboard(string name, string socket, int[] gen, string frequency, string ddr)
         {
             motherboards.Add(new Motherboard
             {

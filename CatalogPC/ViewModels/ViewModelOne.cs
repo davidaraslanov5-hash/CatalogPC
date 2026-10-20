@@ -21,7 +21,8 @@ namespace CatalogPC.ViewModels
         {
             if (processor == null) processor = new Models.Processor();
             if (processor == null) return;
-            processor.test(nameFileCPU);
+            //processor.test(nameFileCPU);
+            processor.NameSearch(nameFileCPU);
             nameFileCPU = "";
         }
     }

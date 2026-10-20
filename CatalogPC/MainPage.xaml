@@ -7,11 +7,14 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Label
-                Text="{Binding LabelText}"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+            <Entry 
+                Text="{Binding NameFileCPU, Mode=TwoWay}"
+                ></Entry>
+            <Button
+                Command="{Binding TestCommand}"
+                >
+                
+            </Button>
         </VerticalStackLayout>
     </ScrollView>
 

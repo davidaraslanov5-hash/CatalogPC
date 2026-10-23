@@ -13,8 +13,21 @@
             <Button
                 Command="{Binding TestCommand}"
                 >
-                
             </Button>
+            <CollectionView ItemsSource="{Binding ResultsSearch}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout>
+                            <Label
+                               HorizontalOptions="Center"
+                               Text="{Binding Metadata.Name}"          
+                               FontSize="14"
+                               Padding="5"
+                               ></Label>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -50,9 +51,8 @@ namespace CatalogPC.Models
         {
             [JsonPropertyName("name")] public string Name { get; set; }
         }
-        //016d1180-e254-43da-ad22-67895ac633b6.json
-        //007a5a23-1e12-45b7-90d0-565b80876539.json
-        List<CPU> SuitableOptions = new List<CPU>();
+
+        public List<CPU> SuitableOptions = new List<CPU>();
         public void NameSearch(string? NameCPU)
         {
             SuitableOptions.Clear();
@@ -61,17 +61,14 @@ namespace CatalogPC.Models
             for(int i = 0; i <= file_count; i++)
             {
                 var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(files_cpu[i]));
-                if (cpu.Metadata.Name == NameCPU )
+                if (cpu.Metadata.Name == NameCPU)  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
                 {
-                    //Debug.WriteLine($"{cpu.Metadata.Name}: {cpu.Socket}: Ядра:{cpu.Cores.Total}/ Потоки:{cpu.Cores.Threads}, {string.Join(",", cpu.Specs.Memory.Types)}");
-                    SuitableOptions.Add(cpu);
+                    SuitableOptions.Add(cpu); 
                     break;
-                }else if(cpu.Series == NameCPU || cpu.Socket == NameCPU)
+                }else if(cpu.Series == NameCPU || cpu.Socket == NameCPU) // а тут добавляем все процессоры подходящие по сокету или по серии
                 {
-                    //Debug.WriteLine($"{cpu.Metadata.Name}: {cpu.Socket}: Ядра:{cpu.Cores.Total}/ Потоки:{cpu.Cores.Threads}, {string.Join(",", cpu.Specs.Memory.Types)}");
                     SuitableOptions.Add(cpu);
                 }
-                //else continue;
             }
         }
 
@@ -79,15 +76,9 @@ namespace CatalogPC.Models
         {
             try {
                 NameSearch(NameCPU);
-                Debug.WriteLine(SuitableOptions.Count);
-                //foreach (var i in SuitableOptions)
-                //{
-                //    Debug.WriteLine($"{i.Metadata.Name}: {i.Socket}: Ядра:{i.Cores.Total}/ Потоки:{i.Cores.Threads}, {string.Join(",", i.Specs.Memory.Types)}");
-                //}
             }
             catch {
                 Debug.WriteLine("Позиция не найдена");
-                Debug.WriteLine(SuitableOptions.Count);
             }
             finally
             {

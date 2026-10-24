@@ -15,16 +15,39 @@
                 >
             </Button>
             <CollectionView ItemsSource="{Binding ResultsSearch}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="3"
+                                     VerticalItemSpacing="15"
+                                     HorizontalItemSpacing="15"
+                                     />
+                </CollectionView.ItemsLayout>
+                
+                
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <VerticalStackLayout>
-                            <Label
+                        <Border Stroke="Black" BackgroundColor="Grey" Padding="10" MaximumWidthRequest="500" StrokeShape="RoundRectangle 8">
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label
                                HorizontalOptions="Center"
-                               Text="{Binding Metadata.Name}"          
+                               Text="{Binding Metadata.Name}"
                                FontSize="14"
-                               Padding="5"
+                               Padding="3"
                                ></Label>
-                        </VerticalStackLayout>
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Socket}"
+                                FontSize="10"
+                                Padding="3"
+                                ></Label>
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Cores.Total}"
+                                FontSize="10"
+                                Padding="3"
+                                ></Label>
+                            </VerticalStackLayout>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

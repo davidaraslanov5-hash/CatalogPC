@@ -13,7 +13,8 @@ namespace CatalogPC.Models
     internal class Processor
     {
 
-        string count_cpu = @"C:\Users\User\source\repos\CatalogPC\CatalogPC\Data\CPU";
+        //string count_cpu = @"C:\Users\User\source\repos\CatalogPC\CatalogPC\Data\CPU";
+        string count_cpu = @"C:\Users\mtr.STEP\source\repos\CatalogPC1\CatalogPC\CatalogPC\Data\CPU\";
         int file_count;
         public Processor() {
 
@@ -79,6 +80,8 @@ namespace CatalogPC.Models
             }
             catch {
                 Debug.WriteLine("Позиция не найдена");
+                Debug.WriteLine($"количество JSON {file_count}");
+                Debug.WriteLine($"количество в списке ответов {SuitableOptions.Count}");
             }
             finally
             {

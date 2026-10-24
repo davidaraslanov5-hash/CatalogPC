@@ -24,14 +24,14 @@ namespace CatalogPC.ViewModels
         [RelayCommand]
         public void Test()
         {
-            ResultsSearch.Clear();
+            resultsSearch.Clear();
             if (processor == null) processor = new Models.Processor();
             if (processor == null) return;
             //processor.test(nameFileCPU);
             processor.test(NameFileCPU);
             foreach (var i in processor.SuitableOptions)
             {
-                ResultsSearch.Add(i);
+                resultsSearch.Add(i);
             }
             NameFileCPU = "";
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using static CatalogPC.Models.Processor;
+using FuzzySharp;
 namespace CatalogPC.Models
 {
     internal class Processor
@@ -61,12 +62,15 @@ namespace CatalogPC.Models
             string[] files_cpu = Directory.GetFiles(count_cpu);
             for(int i = 0; i <= file_count; i++)
             {
+                //можно сделать так чтобы поле NameCPU Имело превую заглавную букву, остальные маленькие
+                //'мочть неточному поиску искать точнее если пользователь написал все КАПСОМ
+                var result = Fuzz.PartialRatio(NameCPU, File.ReadAllText(files_cpu[i]));
                 var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(files_cpu[i]));
-                if (cpu.Metadata.Name == NameCPU)  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
+                if (result >= 80)  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
                 {
                     SuitableOptions.Add(cpu); 
-                    break;
-                }else if(cpu.Series == NameCPU || cpu.Socket == NameCPU) // а тут добавляем все процессоры подходящие по сокету или по серии
+                    //break;
+                }else if(result > 50) // а тут добавляем все процессоры подходящие по сокету или по серии
                 {
                     SuitableOptions.Add(cpu);
                 }

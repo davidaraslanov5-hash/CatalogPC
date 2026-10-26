@@ -15,7 +15,7 @@ namespace CatalogPC.Models
     {
 
         //string count_cpu = @"C:\Users\User\source\repos\CatalogPC\CatalogPC\Data\CPU";
-        string count_cpu = @"C:\Users\mtr.STEP\source\repos\CatalogPC1\CatalogPC\CatalogPC\Data\CPU\";
+        //string count_cpu = @"C:\Users\mtr.STEP\source\repos\CatalogPC1\CatalogPC\CatalogPC\Data\CPU\";
         int file_count;
         public Processor() {
 
@@ -57,22 +57,22 @@ namespace CatalogPC.Models
         public List<CPU> SuitableOptions = new List<CPU>();
         public void NameSearch(string? NameCPU)
         {
+            var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
             SuitableOptions.Clear();
-            file_count = Directory.EnumerateFiles(count_cpu).Count();
-            string[] files_cpu = Directory.GetFiles(count_cpu);
+            file_count = Directory.EnumerateFiles(path).Count();
+            string[] files_cpu = Directory.GetFiles(path);
             for(int i = 0; i <= file_count; i++)
             {
                 //можно сделать так чтобы поле NameCPU Имело превую заглавную букву, остальные маленькие
                 //'мочть неточному поиску искать точнее если пользователь написал все КАПСОМ
-                var result = Fuzz.PartialRatio(NameCPU, File.ReadAllText(files_cpu[i]));
                 var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(files_cpu[i]));
+                //var result = Fuzz.PartialRatio(NameCPU, File.ReadAllText(files_cpu[i]));
+                var result = Fuzz.PartialRatio(NameCPU, cpu.Socket);
+
                 if (result >= 80)  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
                 {
                     SuitableOptions.Add(cpu); 
                     //break;
-                }else if(result > 50) // а тут добавляем все процессоры подходящие по сокету или по серии
-                {
-                    SuitableOptions.Add(cpu);
                 }
             }
         }

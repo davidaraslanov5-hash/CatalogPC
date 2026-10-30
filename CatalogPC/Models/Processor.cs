@@ -21,7 +21,7 @@ namespace CatalogPC.Models
 
 
         }
-        public class CPU
+        public class CPU : ModelOne.Component
         {
             [JsonPropertyName("opendb_id")] public string ProcessorId { get; set; }
             [JsonPropertyName("socket")] public string Socket {  get; set; }
@@ -63,20 +63,17 @@ namespace CatalogPC.Models
             string[] files_cpu = Directory.GetFiles(path);
             for(int i = 0; i <= file_count; i++)
             {
-                //можно сделать так чтобы поле NameCPU Имело превую заглавную букву, остальные маленькие
-                //'мочть неточному поиску искать точнее если пользователь написал все КАПСОМ
                 var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(files_cpu[i]));
-                //var result = Fuzz.PartialRatio(NameCPU, File.ReadAllText(files_cpu[i]));
-                var result = Fuzz.PartialRatio(NameCPU, cpu.Socket);
+                var result = Fuzz.PartialRatio(NameCPU, cpu.Metadata.Name);
 
-                if (result >= 80)  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
+                if (result >= 80 )  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
                 {
                     SuitableOptions.Add(cpu); 
                     //break;
                 }
             }
         }
-
+        /*
         public void test(string? NameCPU)
         {
             try {
@@ -103,6 +100,6 @@ namespace CatalogPC.Models
         //    var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(path));
         //    Debug.WriteLine($"{cpu.Metadata.Name}: {cpu.Socket}: {cpu.Cores.Total}/{cpu.Cores.Threads}, {string.Join(",", cpu.Specs.Memory.Types)}");
         //}
-
+        */
     }
 }

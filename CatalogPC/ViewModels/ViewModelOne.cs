@@ -16,24 +16,24 @@ namespace CatalogPC.ViewModels
 
 
         [ObservableProperty]
-        ObservableCollection<Processor.CPU>? resultsSearch = new ObservableCollection<Processor.CPU>();
+        ObservableCollection<ModelOne.Component>? resultsSearch = new ObservableCollection<ModelOne.Component>();
 
         [ObservableProperty]
-        public string? nameFileCPU;
+        public string? nameFile;
 
         [RelayCommand]
         public void Test()
         {
             resultsSearch.Clear();
-            if (processor == null) processor = new Models.Processor();
-            if (processor == null) return;
+            if (modelOne == null) modelOne = new Models.ModelOne();
+            if (modelOne == null) return;
             //processor.test(nameFileCPU);
-            processor.test(NameFileCPU);
-            foreach (var i in processor.SuitableOptions)
+            modelOne.ExceptionHandling(NameFile);
+            foreach (var i in modelOne.SuitableComponents)
             {
                 resultsSearch.Add(i);
             }
-            NameFileCPU = "";
+            NameFile = "";
 
         }
     }

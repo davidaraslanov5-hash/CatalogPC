@@ -29,7 +29,7 @@ namespace CatalogPC.ViewModels
             if (modelOne == null) return;
             //processor.test(nameFileCPU);
             modelOne.ExceptionHandling(NameFile);
-            foreach (var i in modelOne.Components)
+            foreach (var i in modelOne.SuitableComponents)
             {
                 resultsSearch.Add(i);
             }

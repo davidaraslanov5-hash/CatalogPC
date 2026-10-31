@@ -24,9 +24,9 @@ namespace CatalogPC.Models
         private Models.Processor processor;
         public abstract class Component
         {
-            string Name { get; set; }
+            public string Name { get; set; }
         }
-        public List<Processor.CPU> proc = new List<Processor.CPU>();
+
         public List<Component> Components = new List<Component>();
         public List<Component> SuitableComponents = new List<Component>();
 
@@ -34,54 +34,52 @@ namespace CatalogPC.Models
 
         public void NameSearch(string? Name)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
-            Components.Clear();
-            file_count = Directory.EnumerateFiles(path).Count();
-            string[] files_ = Directory.GetFiles(path);
+            var cpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
+            var gpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "GPU");
 
-            for (int i = 0; i < file_count; i++) {
-                var component = JsonSerializer.Deserialize<Processor.CPU>(File.ReadAllText(files_[i]));
-                Components.Add(component);                                                                
-            }
-
-            file_count = 0;
-
-            path = Path.Combine(AppContext.BaseDirectory, "Data", "GPU");
-            file_count = Directory.EnumerateFiles(path).Count();
-            files_ = Directory.GetFiles(path);
-
-            for (int i = 0; i < file_count; i++)                                                          
-            {                                                                                             
-                var component = JsonSerializer.Deserialize<Videocard.GPU>(File.ReadAllText(files_[i]));
-                Components.Add(component);                                                                
-            }
-
-            //foreach (var CPU in proc) { 
-            //    Components.Add(CPU);
-            //}
-
-
-
-            for (int i = 0; i < file_count; i++)
+            if (Directory.Exists(cpuPath))
             {
-                var component = JsonSerializer.Deserialize<Component>(File.ReadAllText(files_[i]));
-                //var result = Fuzz.PartialRatio(Name, File.ReadAllText(files_[i]));
-                var result = 0;
-                var result_2 = 0;
+                foreach (string file in Directory.GetFiles(cpuPath, "*.json"))
+                {
+                    string jsonText = File.ReadAllText(file);
+                    var component = JsonSerializer.Deserialize<Processor.CPU>(jsonText);
+                    if (component != null)
+                        Components.Add(component);
+                }
+            }
 
+            if (Directory.Exists(gpuPath))
+            {
+                foreach (string file in Directory.GetFiles(gpuPath, "*.json"))
+                {
+                    string jsonText = File.ReadAllText(file);
+                    var component = JsonSerializer.Deserialize<Videocard.GPU>(jsonText);
+                    if (component != null)
+                        Components.Add(component);
+                }
+            }
+
+            foreach (Component component in Components)
+            { 
                 if (component is Processor.CPU cpu)
                 {
-                    result = Fuzz.PartialRatio(Name, cpu.Metadata.Name);
-                    result_2 = Fuzz.PartialRatio(Name, cpu.Socket);
+                    string cpuName = cpu.Metadata?.Name ?? string.Empty;
+                    string cpuSocket = cpu.Socket ?? string.Empty;
+
+                    var result = Fuzz.PartialRatio(Name, cpuName);
+                    var result_2 = Fuzz.PartialRatio(Name, cpuSocket);
                     if (result >= 80 || result_2 >= 90)
                     {
                         SuitableComponents.Add(component);
                     }
                 }
-                if (component is Videocard.GPU gpu)
+                else if (component is Videocard.GPU gpu)
                 {
-                    result = Fuzz.PartialRatio(Name, gpu.Metadata.Name);
-                    result_2 = Fuzz.PartialRatio(Name, gpu.Interface);
+                    string gpuName = gpu.Metadata?.Name ?? string.Empty;
+                    string gpuInterface = gpu.Interface ?? string.Empty;
+
+                    var result = Fuzz.PartialRatio(Name, gpuName);
+                    var result_2 = Fuzz.PartialRatio(Name, gpuInterface);
                     if (result >= 80 || result_2 >= 90)
                     {
                         SuitableComponents.Add(component);
@@ -94,6 +92,7 @@ namespace CatalogPC.Models
             try
             {
                 NameSearch(NameCPU);
+                
             }
             catch
             {

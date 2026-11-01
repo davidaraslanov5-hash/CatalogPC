@@ -28,7 +28,8 @@ namespace CatalogPC.ViewModels
             if (modelOne == null) modelOne = new Models.ModelOne();
             if (modelOne == null) return;
             //processor.test(nameFileCPU);
-            modelOne.ExceptionHandling(NameFile);
+            //modelOne.ExceptionHandling(NameFile);
+            modelOne.NameSearch(nameFile);
             foreach (var i in modelOne.SuitableComponents)
             {
                 resultsSearch.Add(i);

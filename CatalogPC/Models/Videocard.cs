@@ -15,10 +15,10 @@ namespace CatalogPC.Models
 
             [JsonPropertyName("memory")] public int Memory { get; set; }
             [JsonPropertyName("memory_bus")] public int MemoryBus { get; set; }
-            [JsonPropertyName("memory_type")] public int MemoryType { get; set; }
+            [JsonPropertyName("memory_type")] public string MemoryType { get; set; }
 
             [JsonPropertyName("interface")] public string Interface { get; set; }
-            [JsonPropertyName("tdp")] public int Tdp { get; set; }
+            //[JsonPropertyName("tdp")] public int Tdp { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
         }
 

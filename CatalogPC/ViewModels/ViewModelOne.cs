@@ -11,6 +11,7 @@ namespace CatalogPC.ViewModels
 {
     internal partial class ViewModelOne : ObservableObject
     {
+        private Models.Computer computer;
         private Models.Processor processor;
         private Models.ModelOne modelOne;
 
@@ -35,7 +36,45 @@ namespace CatalogPC.ViewModels
                 resultsSearch.Add(i);
             }
             NameFile = "";
+        }
 
+        Processor.CPU CPU;
+        Motherboard.Board BOARD;
+        Videocard.GPU GPU;
+
+        [RelayCommand]
+        public void AddPart(ModelOne.Component component)
+        {
+            if (component is Processor.CPU cpu)
+            {
+                CPU = cpu;
+                Debug.WriteLine(cpu.Metadata.Name);
+            }
+            if (component is Videocard.GPU gpu)
+            {
+                GPU = gpu;
+                Debug.WriteLine(gpu.Metadata.Name);
+            }
+            if (component is Motherboard.Board board)
+            {
+                BOARD = board;
+                Debug.WriteLine(board.Metadata.Name);
+            }
+            //modelOne.PCassembly();       
+        }
+
+        [RelayCommand]
+        public void CompatibilityTest()
+        {
+            if (computer == null) computer = new Models.Computer();
+            if (computer == null) return;
+
+            Computer.PC PC = new Computer.PC();
+            PC.board = BOARD;
+            PC.CPU = CPU;
+            PC.GPU = GPU;
+
+            computer.СompatibilityTest(PC);
         }
     }
 }

@@ -21,7 +21,6 @@ namespace CatalogPC.Models
         //List<Processor> processors = new List<Processor>();
         //List<Motherboard> motherboards = new List<Motherboard>();
         //List<RAM> rams = new List<RAM>();
-        private Models.Processor processor;
         public abstract class Component
         {
             public string Name { get; set; }
@@ -30,7 +29,6 @@ namespace CatalogPC.Models
         public List<Component> Components = new List<Component>();
         public List<Component> SuitableComponents = new List<Component>();
 
-        int file_count;
 
         public void NameSearch(string? Name)
         {
@@ -115,7 +113,6 @@ namespace CatalogPC.Models
                     }
                 }
             }
-            Debug.WriteLine($"количество JSON {file_count}");
             Debug.WriteLine($"количество {Components.Count}");
             Debug.WriteLine($"количество в списке ответов {SuitableComponents.Count}");
         }
@@ -129,7 +126,6 @@ namespace CatalogPC.Models
             catch
             {
                 Debug.WriteLine("Позиция не найдена");
-                Debug.WriteLine($"количество JSON {file_count}");
                 Debug.WriteLine($"количество {Components.Count}");
                 Debug.WriteLine($"количество в списке ответов {SuitableComponents.Count}");
             }

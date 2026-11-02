@@ -14,6 +14,11 @@
                 Command="{Binding TestCommand}"
                 >
             </Button>
+            <Button
+                Command="{Binding CompatibilityTestCommand}"
+                >
+            </Button>
+
             <CollectionView ItemsSource="{Binding ResultsSearch}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
@@ -29,11 +34,20 @@
                         <Border Stroke="Black" BackgroundColor="Grey" Padding="10" MaximumWidthRequest="500" StrokeShape="RoundRectangle 8">
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                 <Label
+                               BackgroundColor="White"
+                               TextColor="Black"
                                HorizontalOptions="Center"
                                Text="{Binding Metadata.Name}"
                                FontSize="14"
                                Padding="3"
-                               ></Label>
+                               >
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.AddPartCommand}"
+                                        CommandParameter="{Binding .}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
                                 <Label
                                 HorizontalOptions="Center"
                                 Text="{Binding Socket}"
@@ -46,6 +60,21 @@
                                 FontSize="10"
                                 Padding="3"
                                 ></Label>
+                                
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Interface}"
+                                FontSize="10"
+                                Padding="3"
+                                ></Label>
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Memory}"
+                                FontSize="10"
+                                Padding="3"
+                                ></Label>
+
+
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

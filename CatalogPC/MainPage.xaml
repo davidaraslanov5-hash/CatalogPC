@@ -1,23 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CatalogPC.MainPage">
+             x:Class="CatalogPC.MainPage"
+             BackgroundColor="#F4F5F7">
 
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Entry 
+
+            <!-- Поле ввода: белый фон, чёрный текст, подсказка -->
+            <Entry
+                Margin="0,30,0,0"
+                HorizontalOptions="Center"
+                WidthRequest="400"
+                Background="White"
+                TextColor="Black"
+                Placeholder="Введите запрос..."
+                PlaceholderColor="Gray"
                 Text="{Binding NameFile, Mode=TwoWay}"
                 ></Entry>
-            <Button
+
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <!-- CornerRadius = скругление кнопок, HeightRequest = высота -->
+                <Button
+                TextColor="White"
+                Text="Search"
+                WidthRequest="200"
+                HeightRequest="45"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                Background="OrangeRed"
                 Command="{Binding TestCommand}"
-                >
-            </Button>
-            <Button
+                ></Button>
+
+                <Button
+                TextColor="White"
+                Text="CompatibilityTest"
+                WidthRequest="200"
+                HeightRequest="45"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                Background="OrangeRed"
                 Command="{Binding CompatibilityTestCommand}"
-                >
-            </Button>
+                ></Button>
+            </HorizontalStackLayout>
 
             <CollectionView ItemsSource="{Binding ResultsSearch}">
                 <CollectionView.ItemsLayout>
@@ -27,19 +54,27 @@
                                      HorizontalItemSpacing="15"
                                      />
                 </CollectionView.ItemsLayout>
-                
-                
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Stroke="Black" BackgroundColor="Grey" Padding="10" MaximumWidthRequest="500" StrokeShape="RoundRectangle 8">
-                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <!-- Карточка: BackgroundColor = цвет карточки, Stroke = цвет рамки,
+                             Padding = отступ внутри, RoundRectangle 16 = скругление -->
+                        <Border Stroke="#DDDFE3"
+                                BackgroundColor="White"
+                                Padding="15"
+                                MaximumWidthRequest="500"
+                                StrokeShape="RoundRectangle 16">
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+
+                                <!-- Название (по нажатию добавляется деталь) -->
                                 <Label
-                               BackgroundColor="White"
-                               TextColor="Black"
+                               TextColor="OrangeRed"
+                               FontAttributes="Bold"
                                HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
                                Text="{Binding Metadata.Name}"
-                               FontSize="14"
-                               Padding="3"
+                               FontSize="16"
+                               Padding="3,3,3,8"
                                >
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer
@@ -48,32 +83,36 @@
                                         CommandParameter="{Binding .}" />
                                     </Label.GestureRecognizers>
                                 </Label>
+
+                                <!-- Характеристики: серый цвет, размер 12 -->
                                 <Label
                                 HorizontalOptions="Center"
                                 Text="{Binding Socket}"
-                                FontSize="10"
+                                TextColor="#555555"
+                                FontSize="12"
                                 Padding="3"
                                 ></Label>
                                 <Label
                                 HorizontalOptions="Center"
                                 Text="{Binding Cores.Total}"
-                                FontSize="10"
+                                TextColor="#555555"
+                                FontSize="12"
                                 Padding="3"
                                 ></Label>
-                                
                                 <Label
                                 HorizontalOptions="Center"
                                 Text="{Binding Interface}"
-                                FontSize="10"
+                                TextColor="#555555"
+                                FontSize="12"
                                 Padding="3"
                                 ></Label>
                                 <Label
                                 HorizontalOptions="Center"
                                 Text="{Binding Memory}"
-                                FontSize="10"
+                                TextColor="#555555"
+                                FontSize="12"
                                 Padding="3"
                                 ></Label>
-
 
                             </VerticalStackLayout>
                         </Border>

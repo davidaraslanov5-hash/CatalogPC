@@ -1,17 +1,169 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CatalogPC.MainPage">
+             x:Class="CatalogPC.MainPage"
+             BackgroundColor="#F4F5F7">
 
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Label
-                Text="{Binding LabelText}"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+            <HorizontalStackLayout Spacing="25" HorizontalOptions="Center" Margin="0,30,0,0"
+                                   RadioButtonGroup.GroupName="Components"
+                                    RadioButtonGroup.SelectedValue="{Binding SelectedComponents}">
+                <Entry
+                HorizontalOptions="Center"
+                WidthRequest="400"
+                Background="White"
+                TextColor="Black"
+                Placeholder="Введите запрос..."
+                PlaceholderColor="Gray"
+                Text="{Binding NameFile, Mode=TwoWay}"
+                ></Entry>
+                <RadioButton
+                    WidthRequest="120"
+                    CornerRadius="12"
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Content="Видеокарты"
+                    GroupName="Components"
+                    Value="GPU"
+                    IsChecked="{Binding OnlyGPU}"
+                />
+                <RadioButton
+                    WidthRequest="120"
+                    CornerRadius="12"
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Content="Процессоры"
+                    GroupName="Components"
+                    Value="CPU"
+                    IsChecked="{Binding OnlyCPU}"
+                />
+                <RadioButton
+                    WidthRequest="120"
+                    CornerRadius="12"
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Content="Материнские платы"
+                    GroupName="Components"
+                    Value="Board"
+                    IsChecked="{Binding OnlyBoard}"
+                />
+                <VerticalStackLayout>
+                    <Label
+                        Text="{Binding cpu_}"    
+                    ></Label>
+                    <Label
+                        Text="{Binding gpu_}"    
+                    ></Label>
+                    <Label
+                        Text="{Binding board_}"    
+                    ></Label>
+                </VerticalStackLayout>
+                
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="440" HorizontalOptions="Center">
+                <!-- CornerRadius = скругление кнопок, HeightRequest = высота -->
+                <Button
+                TextColor="White"
+                Text="Поиск"
+                WidthRequest="200"
+                HeightRequest="45"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                Background="OrangeRed"
+                Command="{Binding TestCommand}"
+                ></Button>
+
+                <Button
+                TextColor="White"
+                Text="Тест совместимости"
+                WidthRequest="200"
+                HeightRequest="45"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                Background="OrangeRed"
+                Command="{Binding CompatibilityTestCommand}"
+                ></Button>
+            
+
+            </HorizontalStackLayout>
+
+            <CollectionView ItemsSource="{Binding ResultsSearch}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="3"
+                                     VerticalItemSpacing="15"
+                                     HorizontalItemSpacing="15"
+                                     />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Карточка: BackgroundColor = цвет карточки, Stroke = цвет рамки,
+                             Padding = отступ внутри, RoundRectangle 16 = скругление -->
+                        <Border Stroke="#DDDFE3"
+                                BackgroundColor="White"
+                                Padding="15"
+                                MaximumWidthRequest="500"
+                                StrokeShape="RoundRectangle 16">
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+
+                                <!-- Название (по нажатию добавляется деталь) -->
+                                <Label
+                               TextColor="OrangeRed"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Metadata.Name}"
+                               FontSize="16"
+                               Padding="3,3,3,8"
+                               >
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.AddPartCommand}"
+                                        CommandParameter="{Binding .}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+
+                                <!-- Характеристики: серый цвет, размер 12 -->
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Socket}"
+                                TextColor="#555555"
+                                FontSize="12"
+                                Padding="3"
+                                ></Label>
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Cores.Total}"
+                                TextColor="#555555"
+                                FontSize="12"
+                                Padding="3"
+                                ></Label>
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Interface}"
+                                TextColor="#555555"
+                                FontSize="12"
+                                Padding="3"
+                                ></Label>
+                                <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Memory}"
+                                TextColor="#555555"
+                                FontSize="12"
+                                Padding="3"
+                                ></Label>
+
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 

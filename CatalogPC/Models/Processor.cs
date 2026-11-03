@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static CatalogPC.Models.Processor;
+using FuzzySharp;
 namespace CatalogPC.Models
 {
     internal class Processor
     {
-        public class CPU
+        public Processor() {
+
+
+        }
+        public class CPU : ModelOne.Component
         {
             [JsonPropertyName("opendb_id")] public string ProcessorId { get; set; }
             [JsonPropertyName("socket")] public string Socket {  get; set; }
@@ -16,6 +25,8 @@ namespace CatalogPC.Models
 
             [JsonPropertyName("specifications")] public CpuSpecs Specs { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
+
+            [JsonPropertyName("series")] public string Series { get; set; }
         }
 
         public class CpuCores
@@ -38,27 +49,5 @@ namespace CatalogPC.Models
         {
             [JsonPropertyName("name")] public string Name { get; set; }
         }
-        //016d1180-e254-43da-ad22-67895ac633b6.json
-        //007a5a23-1e12-45b7-90d0-565b80876539.json
-        public void Search(string? NameCPU)
-        {
-            var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU", NameCPU);
-            var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(path));
-            Debug.WriteLine($"{cpu.Metadata.Name}: {cpu.Socket}: {cpu.Cores.Total}/{cpu.Cores.Threads}, {string.Join(",", cpu.Specs.Memory.Types)}");
-        }
-
-        public void test(string? NameCPU)
-        {
-            try {
-                Search(NameCPU);
-            }
-            catch {
-                Debug.WriteLine("У нас исключение братуха");
-            }
-            finally {
-                Debug.WriteLine("Успешный успех");
-            }
-        }
-
     }
 }

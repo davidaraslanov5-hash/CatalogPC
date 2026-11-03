@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.ComponentModel.Design;
 
 namespace CatalogPC.Models
 {
@@ -16,13 +17,27 @@ namespace CatalogPC.Models
 
         public void СompatibilityTest(PC pc)
         {
-            if (pc.board.Socket == pc.CPU.Socket)
+            if (pc != null)
             {
-                Debug.WriteLine($"Процессор {pc.CPU.Name} подходит к плате {pc.board.Name}");
+                {
+                    if (pc.board.Socket == pc.CPU.Socket)
+                    {
+                        Debug.WriteLine($"Процессор {pc.CPU.Name} подходит к плате {pc.board.Name}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Процессор не подходит к плате ");
+                    }
+                }
+
             }
-            else {
-                Debug.WriteLine($"Процессор не подходит к плате ");
+            else
+            {
+                Debug.WriteLine("Комплектующие не выбраны");
+                return;
             }
+
         }
+        
     }
 }

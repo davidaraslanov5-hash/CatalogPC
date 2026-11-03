@@ -18,6 +18,7 @@ namespace CatalogPC.Models
             [JsonPropertyName("memory_type")] public string MemoryType { get; set; }
 
             [JsonPropertyName("interface")] public string Interface { get; set; }
+
             //[JsonPropertyName("tdp")] public int Tdp { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
         }

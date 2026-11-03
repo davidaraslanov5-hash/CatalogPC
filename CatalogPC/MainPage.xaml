@@ -8,10 +8,10 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-
-            <!-- Поле ввода: белый фон, чёрный текст, подсказка -->
-            <Entry
-                Margin="0,30,0,0"
+            <HorizontalStackLayout Spacing="25" HorizontalOptions="Center" Margin="0,30,0,0"
+                                   RadioButtonGroup.GroupName="Components"
+                                    RadioButtonGroup.SelectedValue="{Binding SelectedComponents}">
+                <Entry
                 HorizontalOptions="Center"
                 WidthRequest="400"
                 Background="White"
@@ -20,12 +20,55 @@
                 PlaceholderColor="Gray"
                 Text="{Binding NameFile, Mode=TwoWay}"
                 ></Entry>
+                <RadioButton
+                    WidthRequest="120"
+                    CornerRadius="12"
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Content="Видеокарты"
+                    GroupName="Components"
+                    Value="GPU"
+                    IsChecked="{Binding OnlyGPU}"
+                />
+                <RadioButton
+                    WidthRequest="120"
+                    CornerRadius="12"
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Content="Процессоры"
+                    GroupName="Components"
+                    Value="CPU"
+                    IsChecked="{Binding OnlyCPU}"
+                />
+                <RadioButton
+                    WidthRequest="120"
+                    CornerRadius="12"
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Content="Материнские платы"
+                    GroupName="Components"
+                    Value="Board"
+                    IsChecked="{Binding OnlyBoard}"
+                />
+                <VerticalStackLayout>
+                    <Label
+                        Text="{Binding cpu_}"    
+                    ></Label>
+                    <Label
+                        Text="{Binding gpu_}"    
+                    ></Label>
+                    <Label
+                        Text="{Binding board_}"    
+                    ></Label>
+                </VerticalStackLayout>
+                
+            </HorizontalStackLayout>
 
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <HorizontalStackLayout Spacing="440" HorizontalOptions="Center">
                 <!-- CornerRadius = скругление кнопок, HeightRequest = высота -->
                 <Button
                 TextColor="White"
-                Text="Search"
+                Text="Поиск"
                 WidthRequest="200"
                 HeightRequest="45"
                 CornerRadius="12"
@@ -36,7 +79,7 @@
 
                 <Button
                 TextColor="White"
-                Text="CompatibilityTest"
+                Text="Тест совместимости"
                 WidthRequest="200"
                 HeightRequest="45"
                 CornerRadius="12"
@@ -44,6 +87,8 @@
                 Background="OrangeRed"
                 Command="{Binding CompatibilityTestCommand}"
                 ></Button>
+            
+
             </HorizontalStackLayout>
 
             <CollectionView ItemsSource="{Binding ResultsSearch}">

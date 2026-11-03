@@ -13,10 +13,6 @@ namespace CatalogPC.Models
 {
     internal class Processor
     {
-
-        //string count_cpu = @"C:\Users\User\source\repos\CatalogPC\CatalogPC\Data\CPU";                     
-        //string count_cpu = @"C:\Users\mtr.STEP\source\repos\CatalogPC1\CatalogPC\CatalogPC\Data\CPU\";
-        int file_count;
         public Processor() {
 
 
@@ -53,53 +49,5 @@ namespace CatalogPC.Models
         {
             [JsonPropertyName("name")] public string Name { get; set; }
         }
-
-        public List<CPU> SuitableOptions = new List<CPU>();
-        public void NameSearch(string? NameCPU)
-        {
-            var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
-            SuitableOptions.Clear();
-            file_count = Directory.EnumerateFiles(path).Count();
-            string[] files_cpu = Directory.GetFiles(path);
-            for(int i = 0; i <= file_count; i++)
-            {
-                var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(files_cpu[i]));
-                var result = Fuzz.PartialRatio(NameCPU, cpu.Metadata.Name);
-
-                if (result >= 80 )  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
-                {
-                    SuitableOptions.Add(cpu); 
-                    //break;
-                }
-            }
-        }
-        /*
-        public void test(string? NameCPU)
-        {
-            try {
-                NameSearch(NameCPU);
-            }
-            catch {
-                Debug.WriteLine("Позиция не найдена");
-                Debug.WriteLine($"количество JSON {file_count}");
-                Debug.WriteLine($"количество в списке ответов {SuitableOptions.Count}");
-            }
-            finally
-            {
-                foreach (var i in SuitableOptions)
-                {
-                    Debug.WriteLine($"{i.Metadata.Name}: {i.Socket}: Ядра:{i.Cores.Total}/ Потоки:{i.Cores.Threads}, {string.Join(",", i.Specs.Memory.Types)}");
-                }
-                //Debug.WriteLine("Результаты");
-            }
-        }
-
-        //public void Search(string? NameCPU)
-        //{
-        //    var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU", NameCPU);
-        //    var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(path));
-        //    Debug.WriteLine($"{cpu.Metadata.Name}: {cpu.Socket}: {cpu.Cores.Total}/{cpu.Cores.Threads}, {string.Join(",", cpu.Specs.Memory.Types)}");
-        //}
-        */
     }
 }

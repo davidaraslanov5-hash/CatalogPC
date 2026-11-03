@@ -1,4 +1,5 @@
-﻿using FuzzySharp;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FuzzySharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +12,47 @@ namespace CatalogPC.Models
 {
     internal class ModelOne
     {
+        public ModelOne()
+        {
+
+            var cpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
+            var gpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "GPU");
+            var boardPath = Path.Combine(AppContext.BaseDirectory, "Data", "Motherboard");
+            
+            SuitableComponents.Clear();
+            if (Directory.Exists(cpuPath))
+            {
+                foreach (string file in Directory.GetFiles(cpuPath))
+                {
+                    string jsonText = File.ReadAllText(file);
+                    var component = JsonSerializer.Deserialize<Processor.CPU>(jsonText);
+                    if (component != null)
+                        ComponentsCPU.Add(component);
+                }
+            }
+
+            if (Directory.Exists(gpuPath))
+            {
+                foreach (string file in Directory.GetFiles(gpuPath))
+                {
+                    string jsonText = File.ReadAllText(file);
+                    var component = JsonSerializer.Deserialize<Videocard.GPU>(jsonText);
+                    if (component != null)
+                        ComponentsGPU.Add(component);
+                }
+            }
+
+            if (Directory.Exists(boardPath))
+            {
+                foreach (string file in Directory.GetFiles(boardPath))
+                {
+                    string jsonText = File.ReadAllText(file);
+                    var component = JsonSerializer.Deserialize<Motherboard.Board>(jsonText);
+                    if (component != null)
+                        ComponentsBoard.Add(component);
+                }
+            }
+        }
         //список параметров по которым судить совместимоть комплектующих
 
         //модель и сокет процессора
@@ -26,65 +68,63 @@ namespace CatalogPC.Models
             public string Name { get; set; }
         }
 
-        public List<Component> Components = new List<Component>();
+        public List<Component> ComponentsCPU = new List<Component>();
+
+        public List<Component> ComponentsGPU = new List<Component>();
+
+        public List<Component> ComponentsBoard = new List<Component>();
+
+
         public List<Component> SuitableComponents = new List<Component>();
+
+        public bool? OnlyCPU = false;
+
+        public bool? OnlyGPU = false;
+
+        public bool? OnlyBoard = false;
 
 
         public void NameSearch(string? Name)
         {
             Debug.WriteLine($"Ищем: '{Name}'");
-            var cpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
-            var gpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "GPU");
-            var boardPath = Path.Combine(AppContext.BaseDirectory, "Data", "Motherboard");
-            Components.Clear();
+
             SuitableComponents.Clear();
-            if (Directory.Exists(cpuPath))
+
+            if (OnlyCPU == true) { SearchCPUs(Name);  }
+            if (OnlyGPU == true) { SearchGPUs(Name); }
+            if (OnlyBoard == true) { SearchBoards(Name); }
+            else
             {
-                foreach (string file in Directory.GetFiles(cpuPath))
-                {
-                    string jsonText = File.ReadAllText(file);
-                    var component = JsonSerializer.Deserialize<Processor.CPU>(jsonText);
-                    if (component != null)
-                        Components.Add(component);
-                }
+                Debug.WriteLine("Ничего не выбрано");
+                return;
             }
 
-            if (Directory.Exists(gpuPath))
-            {
-                foreach (string file in Directory.GetFiles(gpuPath))
-                {
-                    string jsonText = File.ReadAllText(file);
-                    var component = JsonSerializer.Deserialize<Videocard.GPU>(jsonText);
-                    if (component != null)
-                        Components.Add(component);
-                }
-            }
+        }
 
-            if (Directory.Exists(boardPath))
+        public void SearchCPUs(string? Name)
+        {
+            foreach (Component component in ComponentsCPU)
             {
-                foreach (string file in Directory.GetFiles(boardPath))
-                {
-                    string jsonText = File.ReadAllText(file);
-                    var component = JsonSerializer.Deserialize<Motherboard.Board>(jsonText);
-                    if (component != null)
-                        Components.Add(component);
-                }
-            }
-
-            foreach (Component component in Components)
-            { 
                 if (component is Processor.CPU cpu)
                 {
+                    var name = Name ?? string.Empty;
                     string cpuName = cpu.Metadata?.Name ?? string.Empty;
                     string cpuSocket = cpu.Socket ?? string.Empty;
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, cpuName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, cpuSocket);
-                    if (result >= 80 || result_2 >= 90)
-                    {
-                        SuitableComponents.Add(component);
-                    }
-                }
+                    if (result >= 80 || result_2 >= 90) SuitableComponents.Add(component);
+
+                }       
+            }
+            Debug.WriteLine($"количество {ComponentsCPU.Count}");
+            Debug.WriteLine($"количество в списке ответов {SuitableComponents.Count}");
+        }
+
+        public void SearchGPUs(string? Name)
+        {
+            foreach (Component component in ComponentsGPU)
+            {
                 if (component is Videocard.GPU gpu)
                 {
                     var name = Name ?? string.Empty;
@@ -93,29 +133,33 @@ namespace CatalogPC.Models
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, gpuName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, gpuInterface);
-                    if (result >= 70 || result_2 >= 80)
-                    {
-                        SuitableComponents.Add(component);
-                    }
+                    if (result >= 70 || result_2 >= 80) SuitableComponents.Add(component);
                 }
+            }
+            Debug.WriteLine($"количество {ComponentsGPU.Count}");
+            Debug.WriteLine($"количество в списке ответов {SuitableComponents.Count}");
+        }
+
+        public void SearchBoards(string? Name)
+        {
+            foreach (Component component in ComponentsBoard)
+            {
                 if (component is Motherboard.Board board)
                 {
                     var name = Name ?? string.Empty;
-
                     string boardName = board.Metadata?.Name ?? string.Empty;
                     string BoardSocket = board.Socket ?? string.Empty;
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, boardName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, BoardSocket);
-                    if (result >= 80 || result_2 >= 90)
-                    {
-                        SuitableComponents.Add(component);
-                    }
+                    if (result >= 80 || result_2 >= 90) SuitableComponents.Add(component); 
                 }
             }
-            Debug.WriteLine($"количество {Components.Count}");
+            Debug.WriteLine($"количество {ComponentsBoard.Count}");
             Debug.WriteLine($"количество в списке ответов {SuitableComponents.Count}");
         }
+
+
         public void ExceptionHandling(string? NameCPU)
         {
             try
@@ -126,7 +170,6 @@ namespace CatalogPC.Models
             catch
             {
                 Debug.WriteLine("Позиция не найдена");
-                Debug.WriteLine($"количество {Components.Count}");
                 Debug.WriteLine($"количество в списке ответов {SuitableComponents.Count}");
             }
             finally

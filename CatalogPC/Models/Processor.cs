@@ -1,13 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static CatalogPC.Models.Processor;
+using FuzzySharp;
 namespace CatalogPC.Models
 {
     internal class Processor
     {
+
+        //string count_cpu = @"C:\Users\User\source\repos\CatalogPC\CatalogPC\Data\CPU";
+        //string count_cpu = @"C:\Users\mtr.STEP\source\repos\CatalogPC1\CatalogPC\CatalogPC\Data\CPU\";
+        int file_count;
+        public Processor() {
+
+
+        }
         public class CPU
         {
             [JsonPropertyName("opendb_id")] public string ProcessorId { get; set; }
@@ -16,6 +29,8 @@ namespace CatalogPC.Models
 
             [JsonPropertyName("specifications")] public CpuSpecs Specs { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
+
+            [JsonPropertyName("series")] public string Series { get; set; }
         }
 
         public class CpuCores
@@ -38,27 +53,56 @@ namespace CatalogPC.Models
         {
             [JsonPropertyName("name")] public string Name { get; set; }
         }
-        //016d1180-e254-43da-ad22-67895ac633b6.json
-        //007a5a23-1e12-45b7-90d0-565b80876539.json
-        public void Search(string? NameCPU)
+
+        public List<CPU> SuitableOptions = new List<CPU>();
+        public void NameSearch(string? NameCPU)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU", NameCPU);
-            var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(path));
-            Debug.WriteLine($"{cpu.Metadata.Name}: {cpu.Socket}: {cpu.Cores.Total}/{cpu.Cores.Threads}, {string.Join(",", cpu.Specs.Memory.Types)}");
+            var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
+            SuitableOptions.Clear();
+            file_count = Directory.EnumerateFiles(path).Count();
+            string[] files_cpu = Directory.GetFiles(path);
+            for(int i = 0; i <= file_count; i++)
+            {
+                //можно сделать так чтобы поле NameCPU Имело превую заглавную букву, остальные маленькие
+                //'мочть неточному поиску искать точнее если пользователь написал все КАПСОМ
+                var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(files_cpu[i]));
+                //var result = Fuzz.PartialRatio(NameCPU, File.ReadAllText(files_cpu[i]));
+                var result = Fuzz.PartialRatio(NameCPU, cpu.Socket);
+
+                if (result >= 80)  // такс, тут мы добавляем в список подходящий процессор по введенному названию 
+                {
+                    SuitableOptions.Add(cpu); 
+                    //break;
+                }
+            }
         }
 
         public void test(string? NameCPU)
         {
             try {
-                Search(NameCPU);
+                NameSearch(NameCPU);
             }
             catch {
-                Debug.WriteLine("У нас исключение братуха");
+                Debug.WriteLine("Позиция не найдена");
+                Debug.WriteLine($"количество JSON {file_count}");
+                Debug.WriteLine($"количество в списке ответов {SuitableOptions.Count}");
             }
-            finally {
-                Debug.WriteLine("Успешный успех");
+            finally
+            {
+                foreach (var i in SuitableOptions)
+                {
+                    Debug.WriteLine($"{i.Metadata.Name}: {i.Socket}: Ядра:{i.Cores.Total}/ Потоки:{i.Cores.Threads}, {string.Join(",", i.Specs.Memory.Types)}");
+                }
+                //Debug.WriteLine("Результаты");
             }
         }
+
+        //public void Search(string? NameCPU)
+        //{
+        //    var path = Path.Combine(AppContext.BaseDirectory, "Data", "CPU", NameCPU);
+        //    var cpu = JsonSerializer.Deserialize<CPU>(File.ReadAllText(path));
+        //    Debug.WriteLine($"{cpu.Metadata.Name}: {cpu.Socket}: {cpu.Cores.Total}/{cpu.Cores.Threads}, {string.Join(",", cpu.Specs.Memory.Types)}");
+        //}
 
     }
 }

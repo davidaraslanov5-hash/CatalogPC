@@ -37,28 +37,9 @@ namespace CatalogPC.ViewModels
         [ObservableProperty]
         public string? nameFile;
 
-
-
         [ObservableProperty]
         public string selectedComponents;
 
-
-        [RelayCommand]
-        public void Test()
-        {
-            ResultsSearch.Clear();
-            
-            //processor.test(nameFileCPU);
-            //modelOne.ExceptionHandling(NameFile);
-            searchService.NameSearch(NameFile);
-            Debug.WriteLine($"количество в списке ответов {searchService.SuitableComponents.Count}");
-            foreach (var i in searchService.SuitableComponents)
-            {
-                ResultsSearch.Add(i);
-            }
-           
-            NameFile = "";
-        }
         [ObservableProperty]
         public string cpu_;
 
@@ -68,9 +49,29 @@ namespace CatalogPC.ViewModels
         [ObservableProperty]
         public string board_;
 
+        [ObservableProperty]
+        public string message;
+
         Processor.CPU CPU;
         Motherboard.Board BOARD;
         Videocard.GPU GPU;
+
+        [RelayCommand]
+        public void Test()
+        {
+            ResultsSearch.Clear();
+            
+            //processor.test(nameFileCPU);
+            //modelOne.ExceptionHandling(NameFile);
+            searchService.NameSearch(NameFile, Message);
+            Debug.WriteLine($"количество в списке ответов {searchService.SuitableComponents.Count}");
+            foreach (var i in searchService.SuitableComponents)
+            {
+                ResultsSearch.Add(i);
+            }
+           
+            NameFile = "";
+        }
 
         [RelayCommand]
         public void AddPart(ModelOne.Component component)
@@ -102,7 +103,8 @@ namespace CatalogPC.ViewModels
             PC.CPU = CPU;
             PC.GPU = GPU;
 
-            computer.СompatibilityTest(PC);
+            Message = computer.СompatibilityTest(PC);
+            Debug.WriteLine($"Сообщение {Message}");
         }
 
         partial void OnSelectedComponentsChanged(string value)
@@ -110,20 +112,34 @@ namespace CatalogPC.ViewModels
             LoadComponent(value);
         }
 
+        [ObservableProperty]
+        public bool isCPU;
+
+        [ObservableProperty]
+        public bool isGPU;
+
+        [ObservableProperty]
+        public bool isBoard;
+
+
         public void LoadComponent(string Component)
         {
+            IsCPU = false;
+            IsGPU = false;
+            IsBoard = false;
             switch(Component)
             {
                 case "CPU":
-                     searchService.OnlyCPU = true; searchService.OnlyGPU = false; searchService.OnlyBoard = false;
+                    searchService.OnlyCPU = true; IsCPU = true; IsGPU = false; IsBoard = false; searchService.OnlyGPU = false; searchService.OnlyBoard = false;
                     break;
                 case "GPU":
-                    searchService.OnlyGPU = true; searchService.OnlyCPU = false; searchService.OnlyBoard = false; 
+                    searchService.OnlyGPU = true; IsGPU = true; IsCPU = false; IsBoard = false; searchService.OnlyCPU = false; searchService.OnlyBoard = false; 
                     break;
                 case "Board":
-                    searchService.OnlyBoard = true; searchService.OnlyGPU = false; searchService.OnlyCPU = false;
+                    searchService.OnlyBoard = true; IsBoard = true; IsGPU = false; IsCPU = false; searchService.OnlyGPU = false; searchService.OnlyCPU = false;
                     break;
-            }                   
+            }    
+            //нужно заменить всю эту белеберду на ENUM, пока что временно
         }
 
     }

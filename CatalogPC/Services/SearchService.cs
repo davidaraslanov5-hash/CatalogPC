@@ -15,6 +15,9 @@ namespace CatalogPC.Services
         public List<Models.ModelOne.Component> SuitableComponents =>
            modelOne.SuitableComponents;
 
+        public enum ComponentType { CPU, GPU, Board }
+
+        ComponentType type;
         public bool? OnlyCPU = false;
 
         public bool? OnlyGPU = false;
@@ -22,7 +25,7 @@ namespace CatalogPC.Services
         public bool? OnlyBoard = false;
 
 
-        public void NameSearch(string? Name)
+        public void NameSearch(string? Name, string Message)
         {
             Debug.WriteLine($"Ищем: '{Name}'");
 
@@ -37,7 +40,7 @@ namespace CatalogPC.Services
             else if (OnlyBoard == true) { SearchBoards(Name); }
             else
             {
-                Debug.WriteLine("Ничего не выбрано");
+                Message = "ничего не выбрано";
                 //return;
             }
         }

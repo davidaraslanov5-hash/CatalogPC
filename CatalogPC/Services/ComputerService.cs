@@ -16,26 +16,25 @@ namespace CatalogPC.Services
             public Videocard.GPU GPU = new Videocard.GPU();
         }
 
-        public void СompatibilityTest(PC pc)
+        public string СompatibilityTest(PC pc)
         {
-            if (pc != null)
+            if (pc.board != null && pc.board != null)
             {
                 {
                     if (pc.board.Socket == pc.CPU.Socket)
                     {
-                        Debug.WriteLine($"Процессор {pc.CPU.Metadata.Name} подходит к плате {pc.board.Metadata.Name}");
+                        return "Процессор подходит к плате";
                     }
                     else
                     {
-                        Debug.WriteLine($"Процессор не подходит к плате ");
+                        return "Процессор не подходит к плате";
                     }
                 }
 
             }
             else
             {
-                Debug.WriteLine("Комплектующие не выбраны");
-                return;
+                return "Комплектующие не выбраны";
             }
 
         }

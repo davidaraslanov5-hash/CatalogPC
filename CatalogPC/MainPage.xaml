@@ -65,22 +65,36 @@
                 Background="OrangeRed"
                 Command="{Binding TestCommand}"
                 ></Button>
-                
-                <VerticalStackLayout>
-                    <Label
+
+                <Border Stroke="#DDDFE3"
+                            BackgroundColor="White"
+                            Padding="15"
+                            MaximumWidthRequest="500"
+                            StrokeShape="RoundRectangle 16">
+                    <VerticalStackLayout>
+                        <Label
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        Text="{Binding Message}"    
+                    ></Label>
+                        <Label
+                         FontAttributes="Bold"
                         TextColor="Black"
                         Text="{Binding Cpu_}"    
                     ></Label>
-                    <Label
+                        <Label
+                         FontAttributes="Bold"
                         TextColor="Black"
                         Text="{Binding Gpu_}"    
                     ></Label>
-                    <Label
+                        <Label
+                         FontAttributes="Bold"
                         TextColor="Black"
                         Text="{Binding Board_}"    
                     ></Label>
-                </VerticalStackLayout>
-
+                    </VerticalStackLayout>
+                </Border>
+                
                 <Button
                 TextColor="White"
                 Text="Тест совместимости"
@@ -91,10 +105,8 @@
                 Background="OrangeRed"
                 Command="{Binding CompatibilityTestCommand}"
                 ></Button>
-            
-
             </HorizontalStackLayout>
-
+             
             <CollectionView ItemsSource="{Binding ResultsSearch}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
@@ -114,8 +126,6 @@
                                 MaximumWidthRequest="500"
                                 StrokeShape="RoundRectangle 16">
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-
-                                <!-- Название (по нажатию добавляется деталь) -->
                                 <Label
                                TextColor="OrangeRed"
                                FontAttributes="Bold"
@@ -132,36 +142,58 @@
                                         CommandParameter="{Binding .}" />
                                     </Label.GestureRecognizers>
                                 </Label>
-                                
-                                <!-- Характеристики: серый цвет, размер 12 -->
-                                <Label
-                                HorizontalOptions="Center"
-                                Text="{Binding Socket}"
-                                TextColor="#555555"
-                                FontSize="12"
-                                Padding="3"
-                                ></Label>
-                                <Label
-                                HorizontalOptions="Center"
-                                Text="{Binding Cores.Total}"
-                                TextColor="#555555"
-                                FontSize="12"
-                                Padding="3"
-                                ></Label>
-                                <Label
-                                HorizontalOptions="Center"
-                                Text="{Binding Interface}"
-                                TextColor="#555555"
-                                FontSize="12"
-                                Padding="3"
-                                ></Label>
-                                <Label
-                                HorizontalOptions="Center"
-                                Text="{Binding Memory}"
-                                TextColor="#555555"
-                                FontSize="12"
-                                Padding="3"
-                                ></Label>
+
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsCPU}">
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Socket}"
+                                        TextColor="#555555"
+                                        FontSize="12"
+                                        Padding="3"
+                                    ></Label>
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Cores.Total}"
+                                        TextColor="#555555"
+                                        FontSize="12"
+                                        Padding="3"
+                                    ></Label>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsGPU}">
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Interface}"
+                                        TextColor="#555555"
+                                        FontSize="12"
+                                        Padding="3"
+                                        ></Label>
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Memory}"
+                                        TextColor="#555555"
+                                        FontSize="12"
+                                        Padding="3"
+                                    ></Label>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsGPU}">
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Interface}"
+                                        TextColor="#555555"
+                                        FontSize="12"
+                                        Padding="3"
+                                        ></Label>
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Memory.RamType}"
+                                        TextColor="#555555"
+                                        FontSize="12"
+                                        Padding="3"
+                                    ></Label>
+                                </VerticalStackLayout>
+
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

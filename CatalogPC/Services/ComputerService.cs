@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.ComponentModel.Design;
+using CatalogPC.Components;
 
-namespace CatalogPC.Models
+namespace CatalogPC.Services
 {
-    internal class Computer
+    internal class ComputerService
     {
         public class PC
         {
@@ -22,7 +23,7 @@ namespace CatalogPC.Models
                 {
                     if (pc.board.Socket == pc.CPU.Socket)
                     {
-                        Debug.WriteLine($"Процессор {pc.CPU.Name} подходит к плате {pc.board.Name}");
+                        Debug.WriteLine($"Процессор {pc.CPU.Metadata.Name} подходит к плате {pc.board.Metadata.Name}");
                     }
                     else
                     {

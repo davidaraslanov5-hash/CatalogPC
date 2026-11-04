@@ -50,21 +50,10 @@
                     Value="Board"
                     IsChecked="{Binding OnlyBoard}"
                 />
-                <VerticalStackLayout>
-                    <Label
-                        Text="{Binding cpu_}"    
-                    ></Label>
-                    <Label
-                        Text="{Binding gpu_}"    
-                    ></Label>
-                    <Label
-                        Text="{Binding board_}"    
-                    ></Label>
-                </VerticalStackLayout>
-                
+
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout Spacing="440" HorizontalOptions="Center">
+            <HorizontalStackLayout Spacing="80" HorizontalOptions="Center">
                 <!-- CornerRadius = скругление кнопок, HeightRequest = высота -->
                 <Button
                 TextColor="White"
@@ -76,6 +65,21 @@
                 Background="OrangeRed"
                 Command="{Binding TestCommand}"
                 ></Button>
+                
+                <VerticalStackLayout>
+                    <Label
+                        TextColor="Black"
+                        Text="{Binding Cpu_}"    
+                    ></Label>
+                    <Label
+                        TextColor="Black"
+                        Text="{Binding Gpu_}"    
+                    ></Label>
+                    <Label
+                        TextColor="Black"
+                        Text="{Binding Board_}"    
+                    ></Label>
+                </VerticalStackLayout>
 
                 <Button
                 TextColor="White"
@@ -128,7 +132,7 @@
                                         CommandParameter="{Binding .}" />
                                     </Label.GestureRecognizers>
                                 </Label>
-
+                                
                                 <!-- Характеристики: серый цвет, размер 12 -->
                                 <Label
                                 HorizontalOptions="Center"
@@ -158,7 +162,6 @@
                                 FontSize="12"
                                 Padding="3"
                                 ></Label>
-
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

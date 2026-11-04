@@ -7,20 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static CatalogPC.Models.Processor;
+using CatalogPC.Models;
 using FuzzySharp;
-namespace CatalogPC.Models
+
+namespace CatalogPC.Components
 {
     internal class Processor
     {
-        public Processor() {
-
-
-        }
         public class CPU : ModelOne.Component
         {
             [JsonPropertyName("opendb_id")] public string ProcessorId { get; set; }
-            [JsonPropertyName("socket")] public string Socket {  get; set; }
+            [JsonPropertyName("socket")] public string Socket { get; set; }
             [JsonPropertyName("cores")] public CpuCores Cores { get; set; }
 
             [JsonPropertyName("specifications")] public CpuSpecs Specs { get; set; }
@@ -50,4 +47,5 @@ namespace CatalogPC.Models
             [JsonPropertyName("name")] public string Name { get; set; }
         }
     }
+
 }

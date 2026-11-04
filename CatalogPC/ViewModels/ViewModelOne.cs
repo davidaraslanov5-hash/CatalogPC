@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
+using CatalogPC.Components;
 using CatalogPC.Models;
+using CatalogPC.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -12,17 +14,22 @@ namespace CatalogPC.ViewModels
     internal partial class ViewModelOne : ObservableObject
     {
 
-        private Models.Computer computer;
-        private Models.Processor processor;
-        private Models.ModelOne modelOne;
+        private ComputerService computer;
+
+        private SearchService searchService = new SearchService();
+        private Processor processor = new Processor();
+        private Models.ModelOne modelOne = new ModelOne();
 
         public ViewModelOne()
         {
             if (modelOne == null) modelOne = new Models.ModelOne();
             if (modelOne == null) return;
 
-            if (computer == null) computer = new Models.Computer();
+            if (computer == null) computer = new Services.ComputerService();
             if (computer == null) return;
+
+            if (searchService == null) searchService = new Services.SearchService();
+            if (searchService == null) return;
         }
         [ObservableProperty]
         ObservableCollection<ModelOne.Component>? resultsSearch = new ObservableCollection<ModelOne.Component>();
@@ -39,15 +46,17 @@ namespace CatalogPC.ViewModels
         [RelayCommand]
         public void Test()
         {
-            resultsSearch.Clear();
+            ResultsSearch.Clear();
             
             //processor.test(nameFileCPU);
             //modelOne.ExceptionHandling(NameFile);
-            modelOne.NameSearch(nameFile);
-            foreach (var i in modelOne.SuitableComponents)
+            searchService.NameSearch(NameFile);
+            Debug.WriteLine($"количество в списке ответов {searchService.SuitableComponents.Count}");
+            foreach (var i in searchService.SuitableComponents)
             {
-                resultsSearch.Add(i);
+                ResultsSearch.Add(i);
             }
+           
             NameFile = "";
         }
         [ObservableProperty]
@@ -69,27 +78,26 @@ namespace CatalogPC.ViewModels
             if (component is Processor.CPU cpu)
             {
                 CPU = cpu;
-                cpu_ = cpu.Metadata.Name;
+                Cpu_ = cpu.Metadata.Name;
             }
             if (component is Videocard.GPU gpu)
             {
                 GPU = gpu;
-                gpu_ = gpu.Metadata.Name;
+                Gpu_ = gpu.Metadata.Name;
             }
             if (component is Motherboard.Board board)
             {
                 BOARD = board;
-                board_ = board.Metadata.Name;
+                Board_ = board.Metadata.Name;
             }
+
             //modelOne.PCassembly();       
         }
 
         [RelayCommand]
         public void CompatibilityTest()
         {
-
-
-            Computer.PC PC = new Computer.PC();
+            ComputerService.PC PC = new ComputerService.PC();
             PC.board = BOARD;
             PC.CPU = CPU;
             PC.GPU = GPU;
@@ -104,15 +112,18 @@ namespace CatalogPC.ViewModels
 
         public void LoadComponent(string Component)
         {
-            if (Component == "CPU") { modelOne.OnlyCPU = true; modelOne.OnlyGPU = false; modelOne.OnlyBoard = false; }
-            else if (Component == "GPU") { modelOne.OnlyGPU = true; modelOne.OnlyCPU = false; modelOne.OnlyBoard = false; }
-            else if (Component == "Board") { modelOne.OnlyBoard = true; modelOne.OnlyGPU = false; modelOne.OnlyCPU = false; }
-            else
+            switch(Component)
             {
-                Debug.WriteLine("Вы ничего не выбрали");
-                return;
-            }
-                               
+                case "CPU":
+                     searchService.OnlyCPU = true; searchService.OnlyGPU = false; searchService.OnlyBoard = false;
+                    break;
+                case "GPU":
+                    searchService.OnlyGPU = true; searchService.OnlyCPU = false; searchService.OnlyBoard = false; 
+                    break;
+                case "Board":
+                    searchService.OnlyBoard = true; searchService.OnlyGPU = false; searchService.OnlyCPU = false;
+                    break;
+            }                   
         }
 
     }

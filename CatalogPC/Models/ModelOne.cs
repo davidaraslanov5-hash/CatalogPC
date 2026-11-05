@@ -19,7 +19,8 @@ namespace CatalogPC.Models
             var cpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
             var gpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "GPU");
             var boardPath = Path.Combine(AppContext.BaseDirectory, "Data", "Motherboard");
-            
+            var RAMPath = Path.Combine(AppContext.BaseDirectory, "Data", "RAM");
+
             SuitableComponents.Clear();
             if (Directory.Exists(cpuPath))
             {
@@ -35,7 +36,7 @@ namespace CatalogPC.Models
             if (Directory.Exists(gpuPath))
             {
                 foreach (string file in Directory.GetFiles(gpuPath))
-                {
+                {               
                     string jsonText = File.ReadAllText(file);
                     var component = JsonSerializer.Deserialize<Videocard.GPU>(jsonText);
                     if (component != null)
@@ -51,6 +52,17 @@ namespace CatalogPC.Models
                     var component = JsonSerializer.Deserialize<Motherboard.Board>(jsonText);
                     if (component != null)
                         ComponentsBoard.Add(component);
+                }
+            }
+
+            if (Directory.Exists(RAMPath))
+            {
+                foreach (string file in Directory.GetFiles(RAMPath))
+                {
+                    string jsonText = File.ReadAllText(file);
+                    var component = JsonSerializer.Deserialize<RAM.Memory>(jsonText);
+                    if (component != null)
+                        ComponentsRAM.Add(component);
                 }
             }
         }
@@ -75,6 +87,7 @@ namespace CatalogPC.Models
 
         public List<Component> ComponentsBoard = new List<Component>();
 
+        public List<Component> ComponentsRAM = new List<Component>();
 
         public List<Component> SuitableComponents = new List<Component>();
 

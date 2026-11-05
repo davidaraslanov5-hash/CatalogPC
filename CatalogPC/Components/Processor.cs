@@ -24,6 +24,8 @@ namespace CatalogPC.Components
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
 
             [JsonPropertyName("series")] public string Series { get; set; }
+
+
         }
 
         public class CpuCores
@@ -35,6 +37,7 @@ namespace CatalogPC.Components
         public class CpuSpecs
         {
             [JsonPropertyName("memory")] public CpuMemory Memory { get; set; }
+            [JsonPropertyName("tdp")] public int? Tdp { get; set; }
         }
 
         public class CpuMemory

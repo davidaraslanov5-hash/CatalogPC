@@ -50,6 +50,16 @@
                     Value="Board"
                     IsChecked="{Binding OnlyBoard}"
                 />
+                <RadioButton
+                    WidthRequest="120"
+                    CornerRadius="12"
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Content="Память"
+                    GroupName="Components"
+                    Value="RAM"
+                    IsChecked="{Binding OnlyRAM}"
+                />
 
             </HorizontalStackLayout>
 
@@ -73,25 +83,38 @@
                             StrokeShape="RoundRectangle 16">
                     <VerticalStackLayout>
                         <Label
-                        FontAttributes="Bold"
-                        TextColor="Black"
-                        Text="{Binding Message}"    
-                    ></Label>
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            Text="{Binding Message}" ></Label>  
+                    </VerticalStackLayout>
+                </Border>
+                <Border
+                    Stroke="#DDDFE3"
+                            BackgroundColor="White"
+                            Padding="15"
+                            MaximumWidthRequest="500"
+                            StrokeShape="RoundRectangle 16">
+                    <VerticalStackLayout>
                         <Label
-                         FontAttributes="Bold"
-                        TextColor="Black"
-                        Text="{Binding Cpu_}"    
-                    ></Label>
-                        <Label
-                         FontAttributes="Bold"
-                        TextColor="Black"
-                        Text="{Binding Gpu_}"    
-                    ></Label>
-                        <Label
-                         FontAttributes="Bold"
-                        TextColor="Black"
-                        Text="{Binding Board_}"    
-                    ></Label>
+                             FontAttributes="Bold"
+                            TextColor="Black"
+                            Text="{Binding Cpu_}"    
+                        ></Label>
+                                <Label
+                             FontAttributes="Bold"
+                            TextColor="Black"
+                            Text="{Binding Gpu_}"    
+                        ></Label>
+                                <Label
+                             FontAttributes="Bold"
+                            TextColor="Black"
+                            Text="{Binding Board_}"    
+                        ></Label>
+                                <Label
+                             FontAttributes="Bold"
+                            TextColor="Black"
+                            Text="{Binding Ram_}"    
+                        ></Label>
                     </VerticalStackLayout>
                 </Border>
                 
@@ -177,7 +200,7 @@
                                     ></Label>
                                 </VerticalStackLayout>
 
-                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsGPU}">
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsBoard}">
                                     <Label
                                         HorizontalOptions="Center"
                                         Text="{Binding Interface}"

@@ -20,7 +20,7 @@ namespace CatalogPC.Components
 
             [JsonPropertyName("interface")] public string Interface { get; set; }
 
-            //[JsonPropertyName("tdp")] public int Tdp { get; set; }
+            [JsonPropertyName("tdp")] public int? Tdp { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
         }
 

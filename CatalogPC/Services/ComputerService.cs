@@ -11,33 +11,45 @@ namespace CatalogPC.Services
     {
         public class PC
         {
+            public RAM.Memory RAM = new RAM.Memory();
             public Motherboard.Board board = new Motherboard.Board();
             public Processor.CPU CPU = new Processor.CPU();
             public Videocard.GPU GPU = new Videocard.GPU();
         }
-
         public string СompatibilityTest(PC pc)
         {
-            if (pc.board != null && pc.board != null)
+            if (pc == null || pc.board == null || pc.CPU == null || pc.GPU == null) 
             {
-                {
-                    if (pc.board.Socket == pc.CPU.Socket)
-                    {
-                        return "Процессор подходит к плате";
-                    }
-                    else
-                    {
-                        return "Процессор не подходит к плате";
-                    }
-                }
-
-            }
-            else
-            {
-                return "Комплектующие не выбраны";
+                return "Нехватка данных :(";
             }
 
+            bool SocketTrue = true;
+            bool MemoryTrue = true;
+
+            var messages = new List<string>();
+            var boardSocket = pc.board.Socket?.Replace("2 x ", "")?.Trim();
+
+            if (!string.Equals(boardSocket, pc.CPU.Socket, StringComparison.OrdinalIgnoreCase))
+            {
+                messages.Add("Процессор не подходит к плате по сокету");
+                SocketTrue = false;
+            }
+            if (pc.board.Memory.RamType != null && pc.CPU.Specs.Memory.Types?.Contains(pc.board.Memory.RamType) != true)
+            {
+                messages.Add($"Процессор не поддерживает {pc.board.Memory.RamType}");
+                MemoryTrue = false;
+            }
+            if (SocketTrue && MemoryTrue)
+            {
+                messages.Add("Процессор полностью подходит к плате");
+            }
+
+            int? load = pc.CPU.Specs.Tdp + pc.GPU.Tdp + 100;
+                messages.Add($"Рекомендуемый блок мощностью в {(int)(load * 1.4)}W");
+
+            return string.Join(Environment.NewLine, messages);
+            
         }
-        
+
     }
 }

@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Text;
-using CatalogPC.Components;
+﻿using CatalogPC.Components;
 using CatalogPC.Models;
 using CatalogPC.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text;
+using CatalogPC.Services;
+using static CatalogPC.Services.ComputerService;
 
 namespace CatalogPC.ViewModels
 {
@@ -39,6 +41,7 @@ namespace CatalogPC.ViewModels
 
         [ObservableProperty]
         public string selectedComponents;
+        
 
         [ObservableProperty]
         public string cpu_;
@@ -50,27 +53,29 @@ namespace CatalogPC.ViewModels
         public string board_;
 
         [ObservableProperty]
+        public string ram_;
+
+
+        [ObservableProperty]
         public string message;
 
         Processor.CPU CPU;
         Motherboard.Board BOARD;
         Videocard.GPU GPU;
+        RAM.Memory RAM;
 
         [RelayCommand]
         public void Test()
         {
             ResultsSearch.Clear();
             
-            //processor.test(nameFileCPU);
-            //modelOne.ExceptionHandling(NameFile);
             searchService.NameSearch(NameFile, Message);
-            Debug.WriteLine($"количество в списке ответов {searchService.SuitableComponents.Count}");
             foreach (var i in searchService.SuitableComponents)
             {
                 ResultsSearch.Add(i);
             }
-           
-            NameFile = "";
+            
+            NameFile = string.Empty;
         }
 
         [RelayCommand]
@@ -91,7 +96,11 @@ namespace CatalogPC.ViewModels
                 BOARD = board;
                 Board_ = board.Metadata.Name;
             }
-
+            if (component is RAM.Memory ram)
+            {
+                RAM = ram;
+                Ram_ = ram.Metadata.Name;
+            }
             //modelOne.PCassembly();       
         }
 
@@ -121,13 +130,32 @@ namespace CatalogPC.ViewModels
         [ObservableProperty]
         public bool isBoard;
 
+        [ObservableProperty]
+        public bool isRAM;
+
 
         public void LoadComponent(string Component)
         {
-            IsCPU = false;
-            IsGPU = false;
-            IsBoard = false;
-            switch(Component)
+            if (!Enum.TryParse<ComponentType>(
+                Component,
+                ignoreCase: true,
+                out var selectedType))
+            {
+                selectedType = ComponentType.None;
+            }
+
+            searchService.SelectedType = selectedType;
+
+            (IsCPU, IsGPU, IsBoard, IsRAM) = selectedType switch
+            {
+                ComponentType.CPU => (true, false, false, false),
+                ComponentType.GPU => (false, true, false, false),
+                ComponentType.Board => (false, false, true, false),
+                ComponentType.RAM => (false, false, false, true),
+                _ => (false, false, false, false)
+            };
+
+            /*switch (Component)
             {
                 case "CPU":
                     searchService.OnlyCPU = true; IsCPU = true; IsGPU = false; IsBoard = false; searchService.OnlyGPU = false; searchService.OnlyBoard = false;
@@ -138,7 +166,11 @@ namespace CatalogPC.ViewModels
                 case "Board":
                     searchService.OnlyBoard = true; IsBoard = true; IsGPU = false; IsCPU = false; searchService.OnlyGPU = false; searchService.OnlyCPU = false;
                     break;
+                case "RAM":
+                    searchService.OnlyRAM = true; IsBoard = false; IsGPU = false; IsCPU = false; searchService.OnlyGPU = false; searchService.OnlyCPU = false;
+                    break;
             }    
+            */
             //нужно заменить всю эту белеберду на ENUM, пока что временно
         }
 

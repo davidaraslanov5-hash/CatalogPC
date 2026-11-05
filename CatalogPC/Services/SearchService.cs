@@ -15,21 +15,39 @@ namespace CatalogPC.Services
         public List<Models.ModelOne.Component> SuitableComponents =>
            modelOne.SuitableComponents;
 
-        public enum ComponentType { CPU, GPU, Board }
-
-        ComponentType type;
+        public ComponentType SelectedType { get; set; } = ComponentType.CPU;
         public bool? OnlyCPU = false;
 
         public bool? OnlyGPU = false;
 
         public bool? OnlyBoard = false;
 
-
+        public bool? OnlyRAM = false;
         public void NameSearch(string? Name, string Message)
         {
             Debug.WriteLine($"Ищем: '{Name}'");
 
             modelOne.SuitableComponents.Clear();
+
+            switch (SelectedType)
+            {
+                case ComponentType.CPU:
+                    SearchCPUs(Name);
+                    break;
+                case ComponentType.GPU:
+                    SearchGPUs(Name);
+                    break;
+                case ComponentType.Board:
+                    SearchBoards(Name);
+                    break;
+                case ComponentType.RAM:
+                    SearchRAMs(Name);
+                    break;
+                case ComponentType.None:
+                default:
+                    Message = "ничего не выбрано";
+                    break;
+            }
 
             Debug.WriteLine(OnlyCPU);
             Debug.WriteLine(OnlyGPU);
@@ -57,7 +75,7 @@ namespace CatalogPC.Services
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, cpuName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, cpuSocket);
-                    if (result >= 80 || result_2 >= 90) modelOne.SuitableComponents.Add(component);
+                    if (result >= 80 || result_2 >= 90 || cpuName.Contains(Name) ) modelOne.SuitableComponents.Add(component);
 
                 }
             }
@@ -77,7 +95,7 @@ namespace CatalogPC.Services
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, gpuName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, gpuInterface);
-                    if (result >= 70 || result_2 >= 80) modelOne.SuitableComponents.Add(component);
+                    if (gpuName.Contains(Name) || result >= 88 || result_2 >= 80 ) modelOne.SuitableComponents.Add(component);
                 }
             }
             Debug.WriteLine($"количество {modelOne.ComponentsGPU.Count}");
@@ -96,7 +114,27 @@ namespace CatalogPC.Services
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, boardName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, BoardSocket);
-                    if (result >= 80 || result_2 >= 90) modelOne.SuitableComponents.Add(component);
+                    if (result >= 80 || result_2 >= 90 || boardName.Contains(Name)) modelOne.SuitableComponents.Add(component);
+                }
+            }
+            Debug.WriteLine($"количество {modelOne.ComponentsBoard.Count}");
+            Debug.WriteLine($"количество в списке ответов {modelOne.SuitableComponents.Count}");
+        }
+
+        public void SearchRAMs(string? Name)
+        {
+            foreach (ModelOne.Component component in modelOne.ComponentsRAM)
+            {
+                if (component is RAM.Memory ram)
+                {
+                    var name = Name ?? string.Empty;
+                    string ramName = ram.Metadata?.Name ?? string.Empty;
+                    string ramSocket = ram.MemoryType ?? string.Empty;
+
+                    var result = Fuzz.PartialRatio(Name ?? string.Empty, ramName);
+                    var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, ramSocket);
+
+                    if (result >= 80 || result_2 >= 90 || ramName.Contains(Name)) modelOne.SuitableComponents.Add(component);
                 }
             }
             Debug.WriteLine($"количество {modelOne.ComponentsBoard.Count}");

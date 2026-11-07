@@ -11,13 +11,13 @@ namespace CatalogPC.Components
         public class Board : ModelOne.Component
         {
             [JsonPropertyName("socket")] public string Socket {  get; set; }
-            [JsonPropertyName("memory")] public Memory Memory { get; set; }
+            [JsonPropertyName("memory")] public RAM Memory { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
 
             [JsonPropertyName("pcie_slots")] public List<PCIe> Pci_express { get; set; } = new List<PCIe>();
         }
 
-        public class Memory
+        public class RAM
         {
             [JsonPropertyName("ram_type")] public string RamType {  get; set; }
             [JsonPropertyName("slots")] public int Slots { get; set; }

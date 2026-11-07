@@ -8,8 +8,6 @@ namespace CatalogPC
         {
             BindingContext = new ViewModels.ViewModelOne();
             InitializeComponent();
-
-
         }
     }
 }

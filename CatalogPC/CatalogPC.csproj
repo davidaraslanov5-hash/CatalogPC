@@ -77,5 +77,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Data\RAM\" />
+	  <Folder Include="Новая папка\" />
 	</ItemGroup>
 </Project>

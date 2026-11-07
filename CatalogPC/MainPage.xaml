@@ -1,8 +1,206 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CatalogPC.Services"
              x:Class="CatalogPC.MainPage"
              BackgroundColor="#F4F5F7">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="CPUDataTemplate">
+            <Border Stroke="#DDDFE3"
+                BackgroundColor="White"
+                Padding="15"
+                MaximumWidthRequest="500"
+                StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <Label
+                       TextColor="OrangeRed"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Metadata.Name}"
+                       FontSize="16"
+                       Padding="3,3,3,8"
+                     >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                            Path=BindingContext.AddPartCommand}"
+                            CommandParameter="{Binding .}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label
+                        TextColor="OrangeRed"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Socket, StringFormat='Сокет: {0}'}"
+                        FontSize="16"
+                        Padding="3,3,3,8"
+                    ></Label>
+                    <Label
+                       TextColor="OrangeRed"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Cores.Total, StringFormat='Ядра: {0}'}"
+                       FontSize="16"
+                       Padding="3,3,3,8"
+                   ></Label>
+                    <Label
+                        TextColor="OrangeRed"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Cores.Threads, StringFormat='Потоки: {0}'}"
+                        FontSize="16"
+                        Padding="3,3,3,8"
+                    ></Label>
+                    <Label
+                        TextColor="OrangeRed"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Specs.Graphics.GraphicsCore, StringFormat='Графика: {0}'}"
+                        FontSize="16"
+                        Padding="3,3,3,8"
+                    ></Label>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GPUDataTemplate">
+            <Border Stroke="#DDDFE3"
+                BackgroundColor="White"
+                Padding="15"
+                MaximumWidthRequest="500"
+                StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <Label
+                        TextColor="OrangeRed"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Metadata.Name}"
+                        FontSize="16"
+                        Padding="3,3,3,8"
+                      >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                 Path=BindingContext.AddPartCommand}"
+                                 CommandParameter="{Binding .}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label
+                       TextColor="OrangeRed"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Memory, StringFormat='Видеопамять: {0}GB '}"
+                       FontSize="16"
+                       Padding="3,3,3,8"
+                    ></Label>
+                    <Label
+                       TextColor="OrangeRed"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding MemoryType, StringFormat='Тип памяти: {0}'}"
+                       FontSize="16"
+                       Padding="3,3,3,8"
+                    ></Label>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="BoardDataTemplate">
+            <Border Stroke="#DDDFE3"
+                BackgroundColor="White"
+                Padding="15"
+                MaximumWidthRequest="500"
+                StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <Label
+                        TextColor="OrangeRed"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Metadata.Name}"
+                        FontSize="16"
+                        Padding="3,3,3,8"
+                      >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                 Path=BindingContext.AddPartCommand}"
+                                 CommandParameter="{Binding .}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label
+                       TextColor="OrangeRed"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Socket, StringFormat='Сокет: {0}'}"
+                       FontSize="16"
+                       Padding="3,3,3,8"
+                    ></Label>
+                    <Label
+                       TextColor="OrangeRed"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Memory.RamType, StringFormat='Тип памяти: {0}'}"
+                       FontSize="16"
+                       Padding="3,3,3,8"
+                    ></Label>
+                    <Label
+                        TextColor="OrangeRed"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Memory.Slots, StringFormat='Слоты памяти: {0}'}"
+                        FontSize="16"
+                        Padding="3,3,3,8"
+                     ></Label>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="RAMDataTemplate">
+            <Border Stroke="#DDDFE3"
+                BackgroundColor="White"
+                Padding="15"
+                MaximumWidthRequest="500"
+                StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <Label
+                            TextColor="OrangeRed"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Metadata.Name}"
+                            FontSize="16"
+                            Padding="3,3,3,8"
+                          >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                 Path=BindingContext.AddPartCommand}"
+                                 CommandParameter="{Binding .}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+
+
+        <local:ComponentSelector x:Key="ComponentSelector"
+               CPUDataTemplate="{StaticResource CPUDataTemplate}"
+               GPUDataTemplate="{StaticResource GPUDataTemplate}" 
+               BoardDataTemplate ="{StaticResource BoardDataTemplate}"
+               RAMDataTemplate ="{StaticResource RAMDataTemplate}"/>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout
@@ -85,7 +283,7 @@
                         <Label
                             FontAttributes="Bold"
                             TextColor="Black"
-                            Text="{Binding Message}" ></Label>  
+                            Text="{Binding CompatibilityMessage}" ></Label>  
                     </VerticalStackLayout>
                 </Border>
                 <Border
@@ -129,8 +327,12 @@
                 Command="{Binding CompatibilityTestCommand}"
                 ></Button>
             </HorizontalStackLayout>
-             
-            <CollectionView ItemsSource="{Binding ResultsSearch}">
+
+
+
+
+
+            <CollectionView ItemsSource="{Binding ResultsSearch}" ItemTemplate="{StaticResource ComponentSelector}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
                                      Span="3"
@@ -138,90 +340,8 @@
                                      HorizontalItemSpacing="15"
                                      />
                 </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <!-- Карточка: BackgroundColor = цвет карточки, Stroke = цвет рамки,
-                             Padding = отступ внутри, RoundRectangle 16 = скругление -->
-                        <Border Stroke="#DDDFE3"
-                                BackgroundColor="White"
-                                Padding="15"
-                                MaximumWidthRequest="500"
-                                StrokeShape="RoundRectangle 16">
-                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-                                <Label
-                               TextColor="OrangeRed"
-                               FontAttributes="Bold"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center"
-                               Text="{Binding Metadata.Name}"
-                               FontSize="16"
-                               Padding="3,3,3,8"
-                               >
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                                                          Path=BindingContext.AddPartCommand}"
-                                        CommandParameter="{Binding .}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-
-                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsCPU}">
-                                    <Label
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Socket}"
-                                        TextColor="#555555"
-                                        FontSize="12"
-                                        Padding="3"
-                                    ></Label>
-                                    <Label
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Cores.Total}"
-                                        TextColor="#555555"
-                                        FontSize="12"
-                                        Padding="3"
-                                    ></Label>
-                                </VerticalStackLayout>
-
-                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsGPU}">
-                                    <Label
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Interface}"
-                                        TextColor="#555555"
-                                        FontSize="12"
-                                        Padding="3"
-                                        ></Label>
-                                    <Label
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Memory}"
-                                        TextColor="#555555"
-                                        FontSize="12"
-                                        Padding="3"
-                                    ></Label>
-                                </VerticalStackLayout>
-
-                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2" IsVisible="{Binding IsBoard}">
-                                    <Label
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Interface}"
-                                        TextColor="#555555"
-                                        FontSize="12"
-                                        Padding="3"
-                                        ></Label>
-                                    <Label
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Memory.RamType}"
-                                        TextColor="#555555"
-                                        FontSize="12"
-                                        Padding="3"
-                                    ></Label>
-                                </VerticalStackLayout>
-
-                            </VerticalStackLayout>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
             </CollectionView>
+            
         </VerticalStackLayout>
     </ScrollView>
 

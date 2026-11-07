@@ -11,6 +11,7 @@ using System.Text;
 using CatalogPC.Services;
 using static CatalogPC.Services.ComputerService;
 
+
 namespace CatalogPC.ViewModels
 {
     internal partial class ViewModelOne : ObservableObject
@@ -38,11 +39,12 @@ namespace CatalogPC.ViewModels
 
         [ObservableProperty]
         public string? nameFile;
-
         [ObservableProperty]
         public string selectedComponents;
-        
 
+
+
+        //отображение выбранных компонентов
         [ObservableProperty]
         public string cpu_;
 
@@ -56,9 +58,11 @@ namespace CatalogPC.ViewModels
         public string ram_;
 
 
-        [ObservableProperty]
-        public string message;
 
+        [ObservableProperty]
+        public string compatibilityMessage;
+
+        //данные для теста совместимости
         Processor.CPU CPU;
         Motherboard.Board BOARD;
         Videocard.GPU GPU;
@@ -68,8 +72,12 @@ namespace CatalogPC.ViewModels
         public void Test()
         {
             ResultsSearch.Clear();
-            
-            searchService.NameSearch(NameFile, Message);
+            if (string.IsNullOrWhiteSpace(NameFile))
+            {
+                CompatibilityMessage = "Введите название компонента";
+                return;
+            }
+            searchService.NameSearch(NameFile, CompatibilityMessage);
             foreach (var i in searchService.SuitableComponents)
             {
                 ResultsSearch.Add(i);
@@ -112,8 +120,8 @@ namespace CatalogPC.ViewModels
             PC.CPU = CPU;
             PC.GPU = GPU;
 
-            Message = computer.СompatibilityTest(PC);
-            Debug.WriteLine($"Сообщение {Message}");
+            CompatibilityMessage = computer.СompatibilityTest(PC);
+            Debug.WriteLine($"Сообщение {CompatibilityMessage}");
         }
 
         partial void OnSelectedComponentsChanged(string value)
@@ -121,6 +129,7 @@ namespace CatalogPC.ViewModels
             LoadComponent(value);
         }
 
+        //данные для отображения выбранного компонента
         [ObservableProperty]
         public bool isCPU;
 
@@ -154,24 +163,6 @@ namespace CatalogPC.ViewModels
                 ComponentType.RAM => (false, false, false, true),
                 _ => (false, false, false, false)
             };
-
-            /*switch (Component)
-            {
-                case "CPU":
-                    searchService.OnlyCPU = true; IsCPU = true; IsGPU = false; IsBoard = false; searchService.OnlyGPU = false; searchService.OnlyBoard = false;
-                    break;
-                case "GPU":
-                    searchService.OnlyGPU = true; IsGPU = true; IsCPU = false; IsBoard = false; searchService.OnlyCPU = false; searchService.OnlyBoard = false; 
-                    break;
-                case "Board":
-                    searchService.OnlyBoard = true; IsBoard = true; IsGPU = false; IsCPU = false; searchService.OnlyGPU = false; searchService.OnlyCPU = false;
-                    break;
-                case "RAM":
-                    searchService.OnlyRAM = true; IsBoard = false; IsGPU = false; IsCPU = false; searchService.OnlyGPU = false; searchService.OnlyCPU = false;
-                    break;
-            }    
-            */
-            //нужно заменить всю эту белеберду на ENUM, пока что временно
         }
 
     }

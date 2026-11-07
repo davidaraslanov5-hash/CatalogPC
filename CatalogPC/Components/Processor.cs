@@ -38,6 +38,13 @@ namespace CatalogPC.Components
         {
             [JsonPropertyName("memory")] public CpuMemory Memory { get; set; }
             [JsonPropertyName("tdp")] public int? Tdp { get; set; }
+
+            [JsonPropertyName("integratedGraphics")] public IntegratedGraphics Graphics { get; set; }
+        }
+
+        public class IntegratedGraphics
+        {
+            [JsonPropertyName("model")] public string GraphicsCore { get; set; }
         }
 
         public class CpuMemory

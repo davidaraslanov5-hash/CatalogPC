@@ -28,6 +28,7 @@ namespace CatalogPC.Services
 
             var messages = new List<string>();
             var boardSocket = pc.board.Socket?.Replace("2 x ", "")?.Trim();
+            var boardMemoryType = pc.board.Memory?.RamType?.Trim();
 
             if (!string.Equals(boardSocket, pc.CPU.Socket, StringComparison.OrdinalIgnoreCase))
             {
@@ -39,13 +40,25 @@ namespace CatalogPC.Services
                 messages.Add($"Процессор не поддерживает {pc.board.Memory.RamType}");
                 MemoryTrue = false;
             }
-            if (SocketTrue && MemoryTrue)
+            if (pc.RAM != null && !string.Equals(boardMemoryType, pc.RAM.MemoryType, StringComparison.OrdinalIgnoreCase) != true)
             {
-                messages.Add("Процессор полностью подходит к плате");
+                messages.Add($"Память не подходит к плате по типу");
+                MemoryTrue = false;
             }
 
-            int? load = pc.CPU.Specs.Tdp + pc.GPU.Tdp + 100;
-                messages.Add($"Рекомендуемый блок мощностью в {(int)(load * 1.4)}W");
+            if (SocketTrue && MemoryTrue)
+            {
+                messages.Add("Сборка совместима");
+            }
+            if (pc.CPU.Specs.Tdp == null || pc.GPU.Tdp == null)
+            {
+                messages.Add("Не удалось рассчитать рекомендуемую мощность блока питания");
+            }
+            else
+            {
+                int? load = pc.CPU.Specs.Tdp + pc.GPU.Tdp + 100;
+                messages.Add($"Необходим БП мощностью в {(int)(load * 1.4)}W");
+            }
 
             return string.Join(Environment.NewLine, messages);
             

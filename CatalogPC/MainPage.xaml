@@ -202,11 +202,15 @@
                RAMDataTemplate ="{StaticResource RAMDataTemplate}"/>
     </ContentPage.Resources>
 
-    <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <HorizontalStackLayout Spacing="25" HorizontalOptions="Center" Margin="0,30,0,0"
+
+
+            
+
+        <Grid RowDefinitions="Auto,Auto,*" Padding="30,0" RowSpacing="25">
+            <HorizontalStackLayout Grid.Row="0" Spacing="25" HorizontalOptions="Center" Margin="0,30,0,0"
                                    RadioButtonGroup.GroupName="Components"
                                     RadioButtonGroup.SelectedValue="{Binding SelectedComponents}">
                 <Entry
@@ -260,30 +264,28 @@
                 />
 
             </HorizontalStackLayout>
-
-            <HorizontalStackLayout Spacing="80" HorizontalOptions="Center">
+            <HorizontalStackLayout Grid.Row="1" Spacing="80" HorizontalOptions="Center">
                 <!-- CornerRadius = скругление кнопок, HeightRequest = высота -->
                 <Button
-                TextColor="White"
-                Text="Поиск"
-                WidthRequest="200"
-                HeightRequest="45"
-                CornerRadius="12"
-                FontAttributes="Bold"
-                Background="OrangeRed"
-                Command="{Binding TestCommand}"
-                ></Button>
-
+                    TextColor="White"
+                    Text="Поиск"
+                    WidthRequest="200"
+                    HeightRequest="45"
+                    CornerRadius="12"
+                    FontAttributes="Bold"
+                    Background="OrangeRed"
+                    Command="{Binding TestCommand}"
+                    ></Button>
                 <Border Stroke="#DDDFE3"
-                            BackgroundColor="White"
-                            Padding="15"
-                            MaximumWidthRequest="500"
-                            StrokeShape="RoundRectangle 16">
+                    BackgroundColor="White"
+                    Padding="15"
+                    MaximumWidthRequest="500"
+                    StrokeShape="RoundRectangle 16">
                     <VerticalStackLayout>
                         <Label
-                            FontAttributes="Bold"
-                            TextColor="Black"
-                            Text="{Binding CompatibilityMessage}" ></Label>  
+                FontAttributes="Bold"
+                TextColor="Black"
+                Text="{Binding CompatibilityMessage}" ></Label>
                     </VerticalStackLayout>
                 </Border>
                 <Border
@@ -298,24 +300,28 @@
                             TextColor="Black"
                             Text="{Binding Cpu_}"    
                         ></Label>
-                                <Label
+                        <Label
                              FontAttributes="Bold"
                             TextColor="Black"
                             Text="{Binding Gpu_}"    
                         ></Label>
-                                <Label
+                        <Label
                              FontAttributes="Bold"
                             TextColor="Black"
                             Text="{Binding Board_}"    
                         ></Label>
-                                <Label
+                        <Label
                              FontAttributes="Bold"
                             TextColor="Black"
                             Text="{Binding Ram_}"    
                         ></Label>
+                        <HorizontalStackLayout>
+                            <Button BackgroundColor="#F4F5F7" TextColor="Black" Text="-" Command="{Binding DeleteOneRAMCommand}"></Button>
+                            <Button BackgroundColor="#F4F5F7" TextColor="Black" Text="+" Command="{Binding AddOneRAMCommand}"></Button>
+                        </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Border>
-                
+
                 <Button
                 TextColor="White"
                 Text="Тест совместимости"
@@ -327,11 +333,9 @@
                 Command="{Binding CompatibilityTestCommand}"
                 ></Button>
             </HorizontalStackLayout>
-
-
-
-
-
+        </Grid>
+            
+            
             <CollectionView ItemsSource="{Binding ResultsSearch}" ItemTemplate="{StaticResource ComponentSelector}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
@@ -341,8 +345,6 @@
                                      />
                 </CollectionView.ItemsLayout>
             </CollectionView>
-            
-        </VerticalStackLayout>
-    </ScrollView>
 
+        </VerticalStackLayout>
 </ContentPage>

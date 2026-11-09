@@ -1,5 +1,7 @@
-﻿using CatalogPC.Components;
+﻿
+using CatalogPC.Components;
 using CatalogPC.Models;
+using CatalogPC.Services;
 using CatalogPC.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,7 +10,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
-using CatalogPC.Services;
 using static CatalogPC.Services.ComputerService;
 
 
@@ -36,6 +37,9 @@ namespace CatalogPC.ViewModels
         }
         [ObservableProperty]
         ObservableCollection<ModelOne.Component>? resultsSearch = new ObservableCollection<ModelOne.Component>();
+
+        [ObservableProperty]
+        ObservableCollection<ModelOne.Component>? selectedComponentsList = new ObservableCollection<ModelOne.Component>();
 
         [ObservableProperty]
         public string? nameFile;
@@ -67,6 +71,8 @@ namespace CatalogPC.ViewModels
         Motherboard.Board BOARD;
         Videocard.GPU GPU;
         RAM.Memory RAM;
+
+        List<RAM.Memory> Memories = new List<RAM.Memory>();
 
         [RelayCommand]
         public void Test()
@@ -107,9 +113,9 @@ namespace CatalogPC.ViewModels
             if (component is RAM.Memory ram)
             {
                 RAM = ram;
-                Ram_ = ram.Metadata.Name;
-            }
-            //modelOne.PCassembly();       
+                Memories.Add(ram);
+                Ram_ = $"{ram.Metadata.Name} {Memories.Count}-х";
+            }     
         }
 
         [RelayCommand]
@@ -119,10 +125,49 @@ namespace CatalogPC.ViewModels
             PC.board = BOARD;
             PC.CPU = CPU;
             PC.GPU = GPU;
+            PC.Memories = Memories;
+
 
             CompatibilityMessage = computer.СompatibilityTest(PC);
+            Debug.WriteLine($"Кол-во плашек ОЗУ: {PC.Memories.Count}");
             Debug.WriteLine($"Сообщение {CompatibilityMessage}");
         }
+
+        [RelayCommand]
+        public void DeleteOneRAM()
+        {
+            if (Memories.Count > 0)
+            {
+                Memories.RemoveAt(Memories.Count - 1);
+                if (Memories.Count > 0)
+                {
+                    Ram_ = $"{Memories[0].Metadata.Name} {Memories.Count}-х";
+                }
+                else
+                {
+                    Ram_ = string.Empty;
+                }
+            }
+        }
+
+        [RelayCommand]
+        public void AddOneRAM()
+        {
+            if (Memories.Count > 0)
+            {
+                Memories.Add(Memories[Memories.Count - 1]);
+                if (Memories.Count > 0)
+                {
+                    Ram_ = $"{Memories[0].Metadata.Name} {Memories.Count}-х";
+                }
+                else
+                {
+                    Ram_ = string.Empty;
+                }
+            }
+        }
+
+
 
         partial void OnSelectedComponentsChanged(string value)
         {

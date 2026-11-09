@@ -12,19 +12,32 @@ namespace CatalogPC.Services
         public class PC
         {
             public RAM.Memory RAM = new RAM.Memory();
+            public List<RAM.Memory> Memories = new List<RAM.Memory>();
             public Motherboard.Board board = new Motherboard.Board();
             public Processor.CPU CPU = new Processor.CPU();
             public Videocard.GPU GPU = new Videocard.GPU();
         }
         public string СompatibilityTest(PC pc)
         {
-            if (pc == null || pc.board == null || pc.CPU == null || pc.GPU == null) 
-            {
-                return "Нехватка данных :(";
-            }
-
+            bool GraphicsTrue = true;
             bool SocketTrue = true;
             bool MemoryTrue = true;
+
+            if (pc.CPU.Specs.Graphics.GraphicsCore == "None")
+            {
+                if (pc == null || pc.board == null || pc.CPU == null || pc.GPU == null)
+                {
+                    GraphicsTrue = false;
+                    return "Нехватка данных :(";
+                }
+            }
+            else{
+                if (pc == null || pc.board == null || pc.CPU == null)
+                {
+                    GraphicsTrue = true;
+                    return "Нехватка данных :(";
+                }
+            }
 
             var messages = new List<string>();
             var boardSocket = pc.board.Socket?.Replace("2 x ", "")?.Trim();
@@ -40,28 +53,51 @@ namespace CatalogPC.Services
                 messages.Add($"Процессор не поддерживает {pc.board.Memory.RamType}");
                 MemoryTrue = false;
             }
-            if (pc.RAM != null && !string.Equals(boardMemoryType, pc.RAM.MemoryType, StringComparison.OrdinalIgnoreCase) != true)
+            if (pc.board.Memory != null && pc.RAM != null)
             {
-                messages.Add($"Память не подходит к плате по типу");
+                for (int i = 0; i < pc.Memories.Count; i++)
+                {
+                    if (pc.board.Memory.RamType != pc.Memories[i].MemoryType)
+                    {
+                        Debug.WriteLine($"Память {pc.Memories[i].Metadata.Name} не подходит к плате по типу");
+                        messages.Add($"Память не подходит к плате по типу");
+                        MemoryTrue = false;
+                        break;
+                    }
+                }
+            }
+            
+            if (pc.Memories != null && pc.Memories.Count > pc.board.Memory.Slots)
+            {
+                messages.Add($"Количество планок памяти превышает количество слотов на материнской плате");
                 MemoryTrue = false;
             }
-
             if (SocketTrue && MemoryTrue)
             {
                 messages.Add("Сборка совместима");
             }
-            if (pc.CPU.Specs.Tdp == null || pc.GPU.Tdp == null)
+
+
+            int? load;
+
+            if (pc.CPU == null || pc.GPU == null || pc.CPU.Specs.Tdp == null || pc.GPU.Tdp == null)
             {
                 messages.Add("Не удалось рассчитать рекомендуемую мощность блока питания");
             }
             else
             {
-                int? load = pc.CPU.Specs.Tdp + pc.GPU.Tdp + 100;
-                messages.Add($"Необходим БП мощностью в {(int)(load * 1.4)}W");
+                if (pc.GPU != null)
+                {
+                    load = pc.CPU.Specs.Tdp + pc.GPU.Tdp + 100;
+                    messages.Add($"Необходим БП мощностью в {(int)(load * 1.4)}W");
+                }
+                else if (GraphicsTrue)
+                {
+                    load = pc.CPU.Specs.Tdp + 100;
+                    messages.Add($"Необходим БП мощностью в {(int)(load * 1.4)}W");
+                }
             }
-
-            return string.Join(Environment.NewLine, messages);
-            
+            return string.Join(Environment.NewLine, messages);       
         }
 
     }

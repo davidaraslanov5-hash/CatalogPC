@@ -13,6 +13,8 @@ namespace CatalogPC.Components
             [JsonPropertyName("speed")] public int Speed { get; set; }
             [JsonPropertyName("ram_type")] public string MemoryType { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
+
+            [JsonPropertyName("modules")] public Module Module { get; set; }
         }
         public class Module
         {

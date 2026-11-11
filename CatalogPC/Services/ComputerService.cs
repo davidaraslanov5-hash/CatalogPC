@@ -23,25 +23,19 @@ namespace CatalogPC.Services
             bool SocketTrue = true;
             bool MemoryTrue = true;
 
-            if (pc.CPU.Specs.Graphics.GraphicsCore == "None")
-            {
-                if (pc == null || pc.board == null || pc.CPU == null || pc.GPU == null)
-                {
-                    GraphicsTrue = false;
-                    return "Нехватка данных :(";
-                }
-            }
-            else{
-                if (pc == null || pc.board == null || pc.CPU == null)
-                {
-                    GraphicsTrue = true;
-                    return "Нехватка данных :(";
-                }
+            if (pc == null || pc.board == null || pc.CPU == null)
+            {             
+                return "Нехватка данных :(";
             }
 
             var messages = new List<string>();
             var boardSocket = pc.board.Socket?.Replace("2 x ", "")?.Trim();
             var boardMemoryType = pc.board.Memory?.RamType?.Trim();
+
+            if (pc.CPU.Specs.Graphics.GraphicsCore == "None")
+                GraphicsTrue = false;
+            else
+                GraphicsTrue = true;
 
             if (!string.Equals(boardSocket, pc.CPU.Socket, StringComparison.OrdinalIgnoreCase))
             {
@@ -64,6 +58,7 @@ namespace CatalogPC.Services
                         MemoryTrue = false;
                         break;
                     }
+                    
                 }
             }
             

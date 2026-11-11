@@ -6,190 +6,64 @@
              BackgroundColor="#F4F5F7">
 
     <ContentPage.Resources>
+
+        <Style x:Key="CardLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="OrangeRed"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3,3,3,8"/>
+        </Style>
+
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Stroke" Value="#DDDFE3"/>
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="MaximumWidthRequest" Value="500"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
+        </Style>
+
+
         <DataTemplate x:Key="CPUDataTemplate">
-            <Border Stroke="#DDDFE3"
-                BackgroundColor="White"
-                Padding="15"
-                MaximumWidthRequest="500"
-                StrokeShape="RoundRectangle 16">
+            <Border Style="{StaticResource CardBorder}">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-                    <Label
-                       TextColor="OrangeRed"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Metadata.Name}"
-                       FontSize="16"
-                       Padding="3,3,3,8"
-                     >
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                            Path=BindingContext.AddPartCommand}"
-                            CommandParameter="{Binding .}" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Label
-                        TextColor="OrangeRed"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding Socket, StringFormat='Сокет: {0}'}"
-                        FontSize="16"
-                        Padding="3,3,3,8"
-                    ></Label>
-                    <Label
-                       TextColor="OrangeRed"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Cores.Total, StringFormat='Ядра: {0}'}"
-                       FontSize="16"
-                       Padding="3,3,3,8"
-                   ></Label>
-                    <Label
-                        TextColor="OrangeRed"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding Cores.Threads, StringFormat='Потоки: {0}'}"
-                        FontSize="16"
-                        Padding="3,3,3,8"
-                    ></Label>
-                    <Label
-                        TextColor="OrangeRed"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding Specs.Graphics.GraphicsCore, StringFormat='Графика: {0}'}"
-                        FontSize="16"
-                        Padding="3,3,3,8"
-                    ></Label>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Socket, StringFormat='Сокет: {0}'}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Cores.Total, StringFormat='Ядра: {0}'}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Cores.Threads, StringFormat='Потоки: {0}'}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Specs.Graphics.GraphicsCore, StringFormat='Графика: {0}'}"/>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
 
         <DataTemplate x:Key="GPUDataTemplate">
-            <Border Stroke="#DDDFE3"
-                BackgroundColor="White"
-                Padding="15"
-                MaximumWidthRequest="500"
-                StrokeShape="RoundRectangle 16">
+            <Border Style="{StaticResource CardBorder}">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-                    <Label
-                        TextColor="OrangeRed"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding Metadata.Name}"
-                        FontSize="16"
-                        Padding="3,3,3,8"
-                      >
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer
-                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                                 Path=BindingContext.AddPartCommand}"
-                                 CommandParameter="{Binding .}" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Label
-                       TextColor="OrangeRed"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Memory, StringFormat='Видеопамять: {0}GB '}"
-                       FontSize="16"
-                       Padding="3,3,3,8"
-                    ></Label>
-                    <Label
-                       TextColor="OrangeRed"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding MemoryType, StringFormat='Тип памяти: {0}'}"
-                       FontSize="16"
-                       Padding="3,3,3,8"
-                    ></Label>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Memory, StringFormat='Видеопамять: {0}GB '}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding MemoryType, StringFormat='Тип памяти: {0}'}"/>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
+        
         <DataTemplate x:Key="BoardDataTemplate">
-            <Border Stroke="#DDDFE3"
-                BackgroundColor="White"
-                Padding="15"
-                MaximumWidthRequest="500"
-                StrokeShape="RoundRectangle 16">
+            <Border Style="{StaticResource CardBorder}">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-                    <Label
-                        TextColor="OrangeRed"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding Metadata.Name}"
-                        FontSize="16"
-                        Padding="3,3,3,8"
-                      >
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer
-                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                                 Path=BindingContext.AddPartCommand}"
-                                 CommandParameter="{Binding .}" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Label
-                       TextColor="OrangeRed"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Socket, StringFormat='Сокет: {0}'}"
-                       FontSize="16"
-                       Padding="3,3,3,8"
-                    ></Label>
-                    <Label
-                       TextColor="OrangeRed"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Memory.RamType, StringFormat='Тип памяти: {0}'}"
-                       FontSize="16"
-                       Padding="3,3,3,8"
-                    ></Label>
-                    <Label
-                        TextColor="OrangeRed"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding Memory.Slots, StringFormat='Слоты памяти: {0}'}"
-                        FontSize="16"
-                        Padding="3,3,3,8"
-                     ></Label>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Socket, StringFormat='Сокет: {0}'}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.RamType, StringFormat='Тип памяти: {0}'}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.Slots, StringFormat='Слоты памяти: {0}'}"/>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
         
         <DataTemplate x:Key="RAMDataTemplate">
-            <Border Stroke="#DDDFE3"
-                BackgroundColor="White"
-                Padding="15"
-                MaximumWidthRequest="500"
-                StrokeShape="RoundRectangle 16">
+            <Border Style="{StaticResource CardBorder}">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
-                    <Label
-                            TextColor="OrangeRed"
-                            FontAttributes="Bold"
-                            HorizontalOptions="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding Metadata.Name}"
-                            FontSize="16"
-                            Padding="3,3,3,8"
-                          >
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer
-                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                                 Path=BindingContext.AddPartCommand}"
-                                 CommandParameter="{Binding .}" />
-                        </Label.GestureRecognizers>
-                    </Label>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Module.CapacityGB_x1, StringFormat='1 планка: {0}GB '}"/>
+                    
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
@@ -202,13 +76,9 @@
                RAMDataTemplate ="{StaticResource RAMDataTemplate}"/>
     </ContentPage.Resources>
 
-        <VerticalStackLayout
+    <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-
-
-            
-
         <Grid RowDefinitions="Auto,Auto,*" Padding="30,0" RowSpacing="25">
             <HorizontalStackLayout Grid.Row="0" Spacing="25" HorizontalOptions="Center" Margin="0,30,0,0"
                                    RadioButtonGroup.GroupName="Components"
@@ -230,7 +100,6 @@
                     Content="Видеокарты"
                     GroupName="Components"
                     Value="GPU"
-                    IsChecked="{Binding OnlyGPU}"
                 />
                 <RadioButton
                     WidthRequest="120"
@@ -240,7 +109,7 @@
                     Content="Процессоры"
                     GroupName="Components"
                     Value="CPU"
-                    IsChecked="{Binding OnlyCPU}"
+                    
                 />
                 <RadioButton
                     WidthRequest="120"
@@ -250,7 +119,7 @@
                     Content="Материнские платы"
                     GroupName="Components"
                     Value="Board"
-                    IsChecked="{Binding OnlyBoard}"
+                    
                 />
                 <RadioButton
                     WidthRequest="120"
@@ -260,7 +129,7 @@
                     Content="Память"
                     GroupName="Components"
                     Value="RAM"
-                    IsChecked="{Binding OnlyRAM}"
+                    
                 />
 
             </HorizontalStackLayout>
@@ -334,17 +203,29 @@
                 ></Button>
             </HorizontalStackLayout>
         </Grid>
-            
-            
-            <CollectionView ItemsSource="{Binding ResultsSearch}" ItemTemplate="{StaticResource ComponentSelector}">
+        <VerticalStackLayout>
+            <CollectionView
+                HeightRequest="700"
+                Grid.Row="2"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding AddPartCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}" 
+                ItemsSource="{Binding ResultsSearch}" 
+                ItemTemplate="{StaticResource ComponentSelector}"
+                RemainingItemsThreshold="25"
+                Scrolled="OnResultsScrolled"
+                x:Name="Results">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
-                                     Span="3"
+                    
+                    <GridItemsLayout 
+                                    Span="3"
+                                    Orientation="Vertical"
                                      VerticalItemSpacing="15"
                                      HorizontalItemSpacing="15"
                                      />
                 </CollectionView.ItemsLayout>
             </CollectionView>
-
         </VerticalStackLayout>
+
+    </VerticalStackLayout>
 </ContentPage>

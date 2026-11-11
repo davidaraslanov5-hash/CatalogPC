@@ -48,10 +48,8 @@ namespace CatalogPC.Services
                     Message = "ничего не выбрано";
                     break;
             }
-
-
         }
-        public string Field_1 { get; set; } = string.Empty;
+
         public void SearchCPUs(string? Name)
         {
             foreach (ModelOne.Component component in modelOne.ComponentsCPU)
@@ -67,7 +65,6 @@ namespace CatalogPC.Services
                     if (cpuName.Contains(Name, StringComparison.OrdinalIgnoreCase) || result >= 80 || result_2 >= 90)
                     { 
                         modelOne.SuitableComponents.Add(component); 
-                        Field_1 = cpu.Socket;
                     }
 
                 }

@@ -36,7 +36,9 @@ namespace CatalogPC.ViewModels
             if (searchService == null) return;
         }
         [ObservableProperty]
-        ObservableCollection<ModelOne.Component>? resultsSearch = new ObservableCollection<ModelOne.Component>();
+        ObservableCollection<ModelOne.Component>? resultsSearch;
+
+        List<ModelOne.Component> _resultsSearch = new List<ModelOne.Component>();
 
         [ObservableProperty]
         ObservableCollection<ModelOne.Component>? selectedComponentsList = new ObservableCollection<ModelOne.Component>();
@@ -77,20 +79,45 @@ namespace CatalogPC.ViewModels
         [RelayCommand]
         public void Test()
         {
-            ResultsSearch.Clear();
+
             if (string.IsNullOrWhiteSpace(NameFile))
             {
                 CompatibilityMessage = "Введите название компонента";
                 return;
             }
+
             searchService.NameSearch(NameFile, CompatibilityMessage);
-            foreach (var i in searchService.SuitableComponents)
-            {
-                ResultsSearch.Add(i);
-            }
-            
+
+            Debug.WriteLine($"Поиск совершен");
+            _foundComponents = searchService.SuitableComponents;
+            ResultsSearch = new ObservableCollection<ModelOne.Component>(_foundComponents.Take(PageSize));
             NameFile = string.Empty;
         }
+
+        private List<ModelOne.Component> _foundComponents = new();
+
+        private const int PageSize = 50;
+        private bool _isLoadingMore = false;
+
+
+        [RelayCommand]
+        private void LoadMore()
+        {
+            if (_isLoadingMore || ResultsSearch.Count >= _foundComponents.Count)
+                return;
+
+            _isLoadingMore = true;
+            try
+            {
+                foreach (var item in _foundComponents.Skip(ResultsSearch.Count).Take(PageSize))
+                    ResultsSearch.Add(item);
+            }
+            finally
+            {
+                _isLoadingMore = false;
+            }
+        }
+
 
         [RelayCommand]
         public void AddPart(ModelOne.Component component)

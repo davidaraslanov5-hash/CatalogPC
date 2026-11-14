@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CatalogPC.Services"
+             xmlns:vm="clr-namespace:CatalogPC.ViewModels"
              x:Class="CatalogPC.MainPage"
              BackgroundColor="#F4F5F7">
 
@@ -30,19 +31,33 @@
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Socket, StringFormat='Сокет: {0}'}"/>
-                    <Label Style="{StaticResource CardLabel}" Text="{Binding Cores.Total, StringFormat='Ядра: {0}'}"/>
-                    <Label Style="{StaticResource CardLabel}" Text="{Binding Cores.Threads, StringFormat='Потоки: {0}'}"/>
-                    <Label Style="{StaticResource CardLabel}" Text="{Binding Specs.Graphics.GraphicsCore, StringFormat='Графика: {0}'}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Clocks.Performance.Base , StringFormat='Частота: {0} ГГц'}" />
+
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Cores.CoresThreads}"/>
+
+                    <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
+                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Clocks.Performance.Boost , StringFormat='Частота в бусте: {0} ГГц'}" />
+                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Specs.Graphics.GraphicsCore, StringFormat='Графика: {0}'}"/>
+                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Specs.Tdp, StringFormat='TDP: {0}W'}" />
+                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Specs.ECCMemorySupport, StringFormat='Поддержка ECC: {0}'}" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
 
         <DataTemplate x:Key="GPUDataTemplate">
-            <Border Style="{StaticResource CardBorder}">
+            <Border Style="{StaticResource CardBorder}" IsVisible="{Binding AdvancedInfo}">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Memory, StringFormat='Видеопамять: {0}GB '}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding MemoryType, StringFormat='Тип памяти: {0}'}"/>
+
+                    <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
+                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Tdp, StringFormat='TDP: {0}W'}" />
+                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding MemoryBus, StringFormat='Шина памяти: {0}'}" />
+                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Interface, StringFormat='Интерфейс: {0}'}" />
+
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
@@ -54,6 +69,7 @@
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Socket, StringFormat='Сокет: {0}'}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.RamType, StringFormat='Тип памяти: {0}'}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.Slots, StringFormat='Слоты памяти: {0}'}"/>
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.Max, StringFormat='Максимум ОЗУ: {0}GB'}"/>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
@@ -63,7 +79,7 @@
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Module.CapacityGB_x1, StringFormat='1 планка: {0}GB '}"/>
-                    
+                    <Label Style="{StaticResource CardLabel}" Text="{Binding MemoryType, StringFormat='Формат: {0}'}"/>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
@@ -84,13 +100,13 @@
                                    RadioButtonGroup.GroupName="Components"
                                     RadioButtonGroup.SelectedValue="{Binding SelectedComponents}">
                 <Entry
-                HorizontalOptions="Center"
-                WidthRequest="400"
-                Background="White"
-                TextColor="Black"
-                Placeholder="Введите запрос..."
-                PlaceholderColor="Gray"
-                Text="{Binding NameFile, Mode=TwoWay}"
+                    HorizontalOptions="Center"
+                    WidthRequest="400"
+                    Background="White"
+                    TextColor="Black"
+                    Placeholder="Введите запрос..."
+                    PlaceholderColor="Gray"
+                    Text="{Binding NameFile, Mode=TwoWay}"
                 ></Entry>
                 <RadioButton
                     WidthRequest="120"
@@ -131,6 +147,12 @@
                     Value="RAM"
                     
                 />
+                <Button
+                    Background="OrangeRed"
+                    TextColor="White"
+                    Text="{Binding ShowTextInfo}"
+                    Command="{Binding ExtraInfoCommand}"
+                    ></Button>
 
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="1" Spacing="80" HorizontalOptions="Center">
@@ -185,8 +207,8 @@
                             Text="{Binding Ram_}"    
                         ></Label>
                         <HorizontalStackLayout>
-                            <Button BackgroundColor="#F4F5F7" TextColor="Black" Text="-" Command="{Binding DeleteOneRAMCommand}"></Button>
-                            <Button BackgroundColor="#F4F5F7" TextColor="Black" Text="+" Command="{Binding AddOneRAMCommand}"></Button>
+                            <Button BackgroundColor="#F4F5F7" TextColor="Black" Text="-" Command="{Binding DeleteOneRAMCommand}" IsVisible="{Binding IsRAM}"></Button>
+                            <Button BackgroundColor="#F4F5F7" TextColor="Black" Text="+" Command="{Binding AddOneRAMCommand}" IsVisible="{Binding IsRAM}"></Button>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -223,6 +245,7 @@
                                      VerticalItemSpacing="15"
                                      HorizontalItemSpacing="15"
                                      />
+                    
                 </CollectionView.ItemsLayout>
             </CollectionView>
         </VerticalStackLayout>

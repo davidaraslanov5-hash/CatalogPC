@@ -62,11 +62,11 @@ namespace CatalogPC.Services
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, cpuName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, cpuSocket);
-                    if (cpuName.Contains(Name, StringComparison.OrdinalIgnoreCase) || result >= 80 || result_2 >= 90)
-                    { 
+                    if (cpuName.Contains(Name, StringComparison.OrdinalIgnoreCase) 
+                        || cpuSocket.Contains(Name, StringComparison.OrdinalIgnoreCase)
+                        || result >= 80 
+                        || result_2 >= 90)
                         modelOne.SuitableComponents.Add(component); 
-                    }
-
                 }
             }
             Debug.WriteLine($"количество {modelOne.ComponentsCPU.Count}");
@@ -85,7 +85,13 @@ namespace CatalogPC.Services
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, gpuName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, gpuInterface);
-                    if (gpuName.Contains(Name, StringComparison.OrdinalIgnoreCase) || result >= 88 || result_2 >= 80 ) modelOne.SuitableComponents.Add(component);
+                    
+                    if (gpuName.Contains(Name, StringComparison.OrdinalIgnoreCase)
+                        || gpuInterface.Contains(Name, StringComparison.OrdinalIgnoreCase)
+                        || result >= 88 
+                        || result_2 >= 80)
+                    modelOne.SuitableComponents.Add(component);
+
                 }
             }
             Debug.WriteLine($"количество {modelOne.ComponentsGPU.Count}");
@@ -104,7 +110,11 @@ namespace CatalogPC.Services
 
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, boardName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, BoardSocket);
-                    if (boardName.Contains(Name, StringComparison.OrdinalIgnoreCase) || result >= 80 || result_2 >= 90) modelOne.SuitableComponents.Add(component);
+                    if (boardName.Contains(Name, StringComparison.OrdinalIgnoreCase) 
+                        || BoardSocket.Contains(Name, StringComparison.OrdinalIgnoreCase)
+                        || result >= 80 
+                        || result_2 >= 90)
+                        modelOne.SuitableComponents.Add(component);
                 }
             }
             Debug.WriteLine($"количество {modelOne.ComponentsBoard.Count}");
@@ -124,7 +134,11 @@ namespace CatalogPC.Services
                     var result = Fuzz.PartialRatio(Name ?? string.Empty, ramName);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, ramSocket);
 
-                    if (ramName.Contains(Name, StringComparison.OrdinalIgnoreCase) || result >= 80 || result_2 >= 90) modelOne.SuitableComponents.Add(component);
+                    if (ramName.Contains(Name, StringComparison.OrdinalIgnoreCase) 
+                        || ramSocket.Contains(Name, StringComparison.OrdinalIgnoreCase)
+                        || result >= 80 
+                        || result_2 >= 90) 
+                        modelOne.SuitableComponents.Add(component);
                 }
             }
             Debug.WriteLine($"количество {modelOne.ComponentsBoard.Count}");

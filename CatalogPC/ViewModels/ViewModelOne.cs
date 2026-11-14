@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Input;
 using static CatalogPC.Services.ComputerService;
 
 
@@ -76,6 +77,11 @@ namespace CatalogPC.ViewModels
 
         List<RAM.Memory> Memories = new List<RAM.Memory>();
 
+        private List<ModelOne.Component> _foundComponents = new();
+
+        private const int PageSize = 50;
+        private bool _isLoadingMore = false;
+
         [RelayCommand]
         public void Test()
         {
@@ -94,11 +100,27 @@ namespace CatalogPC.ViewModels
             NameFile = string.Empty;
         }
 
-        private List<ModelOne.Component> _foundComponents = new();
+        [ObservableProperty]
+        public bool advancedInfo = false;
 
-        private const int PageSize = 50;
-        private bool _isLoadingMore = false;
+        [ObservableProperty]
+        public string showTextInfo = "Показать дополнительную информацию";
 
+        [RelayCommand]
+        public void ExtraInfo()
+        {
+            AdvancedInfo = !AdvancedInfo;
+            switch (AdvancedInfo)
+            {
+                case true:
+                    ShowTextInfo = "Скрыть дополнительную информацию";
+                    break;
+                case false:
+                    ShowTextInfo = "Показать дополнительную информацию";
+                    break;
+            }
+            Debug.WriteLine($"AdvancedInfo: {AdvancedInfo}");
+        }
 
         [RelayCommand]
         private void LoadMore()
@@ -202,6 +224,8 @@ namespace CatalogPC.ViewModels
         }
 
         //данные для отображения выбранного компонента
+
+
         [ObservableProperty]
         public bool isCPU;
 
@@ -236,6 +260,8 @@ namespace CatalogPC.ViewModels
                 _ => (false, false, false, false)
             };
         }
+
+        
 
     }
 }

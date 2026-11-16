@@ -17,6 +17,15 @@
             <Setter Property="Padding" Value="3,3,3,8"/>
         </Style>
 
+        <Style x:Key="AdvancedInfoLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="Orange"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3,3,3,8"/>
+        </Style>
+
         <Style x:Key="CardBorder" TargetType="Border">
             <Setter Property="Stroke" Value="#DDDFE3"/>
             <Setter Property="BackgroundColor" Value="White"/>
@@ -25,6 +34,12 @@
             <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
         </Style>
 
+        <Style x:Key="ComponentButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="OrangeRed"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="WidthRequest" Value="120"/>
+            <Setter Property="CornerRadius" Value="12"/>
+        </Style>
 
         <DataTemplate x:Key="CPUDataTemplate">
             <Border Style="{StaticResource CardBorder}">
@@ -36,10 +51,11 @@
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Cores.CoresThreads}"/>
 
                     <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
-                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Clocks.Performance.Boost , StringFormat='Частота в бусте: {0} ГГц'}" />
-                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Specs.Graphics.GraphicsCore, StringFormat='Графика: {0}'}"/>
-                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Specs.Tdp, StringFormat='TDP: {0}W'}" />
-                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Specs.ECCMemorySupport, StringFormat='Поддержка ECC: {0}'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Clocks.Performance.Boost , StringFormat='Частота в бусте: {0} ГГц'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Specs.Graphics.GraphicsCore, StringFormat='Графика: {0}'}"/>
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Specs.Tdp, StringFormat='TDP: {0}W'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Specs.ECCMemorySupport, StringFormat='Поддержка ECC: {0}'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Specs.Memory.MemoryTypes, StringFormat='Поддержка форматов: {0}'}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
@@ -53,10 +69,10 @@
                     <Label Style="{StaticResource CardLabel}" Text="{Binding MemoryType, StringFormat='Тип памяти: {0}'}"/>
 
                     <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
-                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Tdp, StringFormat='TDP: {0}W'}" />
-                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding MemoryBus, StringFormat='Шина памяти: {0}'}" />
-                        <Label TextColor="Orange" Style="{StaticResource CardLabel}" Text="{Binding Interface, StringFormat='Интерфейс: {0}'}" />
-
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Tdp, StringFormat='TDP: {0}W'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding MemoryBus, StringFormat='Шина памяти: {0}'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Interface, StringFormat='Интерфейс: {0}'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding PowerInfo.PowerConnectors, StringFormat='Питание: {0}'}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
@@ -69,7 +85,13 @@
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Socket, StringFormat='Сокет: {0}'}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.RamType, StringFormat='Тип памяти: {0}'}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.Slots, StringFormat='Слоты памяти: {0}'}"/>
-                    <Label Style="{StaticResource CardLabel}" Text="{Binding Memory.Max, StringFormat='Максимум ОЗУ: {0}GB'}"/>
+                    
+                    
+                    <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Memory.Max, StringFormat='Максимум ОЗУ: {0}GB'}"/>
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Chipset, StringFormat='Чипсет: {0}'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding FormFactor, StringFormat='Формат: {0}'}" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
@@ -80,6 +102,10 @@
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Metadata.Name}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding Module.CapacityGB_x1, StringFormat='1 планка: {0}GB '}"/>
                     <Label Style="{StaticResource CardLabel}" Text="{Binding MemoryType, StringFormat='Формат: {0}'}"/>
+
+                    <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding EccFormat, StringFormat='ECC: {0}'}"/>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
         </DataTemplate>
@@ -168,15 +194,16 @@
                     Command="{Binding TestCommand}"
                     ></Button>
                 <Border Stroke="#DDDFE3"
+                    IsVisible="{Binding MessagesVisible}"
                     BackgroundColor="White"
                     Padding="15"
                     MaximumWidthRequest="500"
                     StrokeShape="RoundRectangle 16">
                     <VerticalStackLayout>
                         <Label
-                FontAttributes="Bold"
-                TextColor="Black"
-                Text="{Binding CompatibilityMessage}" ></Label>
+                    FontAttributes="Bold"
+                    TextColor="Black"
+                    Text="{Binding CompatibilityMessage}" ></Label>
                     </VerticalStackLayout>
                 </Border>
                 <Border

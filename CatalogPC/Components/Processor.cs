@@ -62,8 +62,10 @@ namespace CatalogPC.Components
 
         public class CpuMemory
         {
+            [JsonIgnore]
+            public string MemoryTypes => Types != null ? string.Join(", ", Types) : "Не указано";
             [JsonPropertyName("types")] public List<string> Types { get; set; }
-            
+            //public string MemoryType = ($"Types {Types[0]} ");
         }
 
         public class Meta

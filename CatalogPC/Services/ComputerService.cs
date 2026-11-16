@@ -40,7 +40,7 @@ namespace CatalogPC.Services
                 GraphicsTrue = true;
             if (!string.Equals(boardSocket, pc.CPU.Socket, StringComparison.OrdinalIgnoreCase))
             {
-                messages.Add("Процессор не подходит к плате по сокету");
+                messages.Add($"Процессор должен иметь сокет {boardSocket}");
                 SocketTrue = false;
             }
             if (pc.board.Memory.RamType != null && pc.CPU.Specs.Memory.Types?.Contains(pc.board.Memory.RamType) != true)

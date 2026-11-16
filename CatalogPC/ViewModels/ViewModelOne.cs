@@ -79,7 +79,7 @@ namespace CatalogPC.ViewModels
 
         private List<ModelOne.Component> _foundComponents = new();
 
-        private const int PageSize = 50;
+        private const int PageSize = 100;
         private bool _isLoadingMore = false;
 
         [RelayCommand]
@@ -100,6 +100,9 @@ namespace CatalogPC.ViewModels
             NameFile = string.Empty;
         }
 
+        [ObservableProperty]
+        public bool messagesVisible = false;    
+        
         [ObservableProperty]
         public bool advancedInfo = false;
 
@@ -178,6 +181,7 @@ namespace CatalogPC.ViewModels
 
 
             CompatibilityMessage = computer.СompatibilityTest(PC);
+            MessagesVisible = true;
             Debug.WriteLine($"Кол-во плашек ОЗУ: {PC.Memories.Count}");
             Debug.WriteLine($"Сообщение {CompatibilityMessage}");
         }

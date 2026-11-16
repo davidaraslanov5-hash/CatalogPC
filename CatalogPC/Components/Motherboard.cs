@@ -12,7 +12,10 @@ namespace CatalogPC.Components
         {
             [JsonPropertyName("socket")] public string Socket {  get; set; }
             [JsonPropertyName("memory")] public RAM Memory { get; set; }
-            [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
+            [JsonPropertyName("metadata")] public Meta? Metadata { get; set; }
+            [JsonPropertyName("form_factor")] public string? FormFactor { get; set; }
+            [JsonPropertyName("chipset")] public string? Chipset { get; set; }
+
 
             [JsonPropertyName("pcie_slots")] public List<PCIe> Pci_express { get; set; } = new List<PCIe>();
         }

@@ -18,6 +18,12 @@ namespace CatalogPC.Services
             public Processor.CPU CPU = new Processor.CPU();
             public Videocard.GPU GPU = new Videocard.GPU();
         }
+
+        public void GPUIndex(PC pc)
+        {
+            
+        }
+
         public string СompatibilityTest(PC pc)
         {
             bool GraphicsTrue = true;

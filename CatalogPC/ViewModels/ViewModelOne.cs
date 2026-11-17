@@ -70,12 +70,7 @@ namespace CatalogPC.ViewModels
         public string compatibilityMessage;
 
         //данные для теста совместимости
-        Processor.CPU CPU;
-        Motherboard.Board BOARD;
-        Videocard.GPU GPU;
-        RAM.Memory RAM;
 
-        List<RAM.Memory> Memories = new List<RAM.Memory>();
 
         private List<ModelOne.Component> _foundComponents = new();
 
@@ -100,30 +95,6 @@ namespace CatalogPC.ViewModels
             NameFile = string.Empty;
         }
 
-        [ObservableProperty]
-        public bool messagesVisible = false;    
-        
-        [ObservableProperty]
-        public bool advancedInfo = false;
-
-        [ObservableProperty]
-        public string showTextInfo = "Показать дополнительную информацию";
-
-        [RelayCommand]
-        public void ExtraInfo()
-        {
-            AdvancedInfo = !AdvancedInfo;
-            switch (AdvancedInfo)
-            {
-                case true:
-                    ShowTextInfo = "Скрыть дополнительную информацию";
-                    break;
-                case false:
-                    ShowTextInfo = "Показать дополнительную информацию";
-                    break;
-            }
-            Debug.WriteLine($"AdvancedInfo: {AdvancedInfo}");
-        }
 
         [RelayCommand]
         private void LoadMore()
@@ -143,6 +114,12 @@ namespace CatalogPC.ViewModels
             }
         }
 
+        Processor.CPU CPU;
+        Motherboard.Board BOARD;
+        Videocard.GPU GPU;
+        RAM.Memory RAM;
+
+        List<RAM.Memory> Memories = new List<RAM.Memory>();
 
         [RelayCommand]
         public void AddPart(ModelOne.Component component)
@@ -220,8 +197,6 @@ namespace CatalogPC.ViewModels
             }
         }
 
-
-
         partial void OnSelectedComponentsChanged(string value)
         {
             LoadComponent(value);
@@ -265,7 +240,31 @@ namespace CatalogPC.ViewModels
             };
         }
 
-        
+
+        [ObservableProperty]
+        public bool messagesVisible = false;
+
+        [ObservableProperty]
+        public bool advancedInfo = false;
+
+        [ObservableProperty]
+        public string showTextInfo = "Показать дополнительную информацию";
+
+        [RelayCommand]
+        public void ExtraInfo()
+        {
+            AdvancedInfo = !AdvancedInfo;
+            switch (AdvancedInfo)
+            {
+                case true:
+                    ShowTextInfo = "Скрыть дополнительную информацию";
+                    break;
+                case false:
+                    ShowTextInfo = "Показать дополнительную информацию";
+                    break;
+            }
+            Debug.WriteLine($"AdvancedInfo: {AdvancedInfo}");
+        }
 
     }
 }

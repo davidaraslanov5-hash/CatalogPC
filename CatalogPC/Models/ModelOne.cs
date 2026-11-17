@@ -16,13 +16,14 @@ namespace CatalogPC.Models
         public ModelOne()
         {
 
-            var cpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");
+            var cpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "CPU");  //получаем путь к нашей папке комплектующих
             var gpuPath = Path.Combine(AppContext.BaseDirectory, "Data", "GPU");
             var boardPath = Path.Combine(AppContext.BaseDirectory, "Data", "Motherboard");
             var RAMPath = Path.Combine(AppContext.BaseDirectory, "Data", "RAM");
 
-            SuitableComponents.Clear();
-            if (Directory.Exists(cpuPath))
+            SuitableComponents.Clear(); //очистка списка подходящих запчастей по поиску
+
+            if (Directory.Exists(cpuPath)) 
             {
                 foreach (string file in Directory.GetFiles(cpuPath))
                 {
@@ -33,12 +34,15 @@ namespace CatalogPC.Models
                 }
             }
 
-            if (Directory.Exists(gpuPath))
+            if (Directory.Exists(gpuPath)) //проверка есть ли вообще наша папка
             {
-                foreach (string file in Directory.GetFiles(gpuPath))
+                //file это и есть наш json из папки 
+                foreach (string file in Directory.GetFiles(gpuPath)) //запускаем цикл где поочередно закидывем файлы с папок в списки комплектующих 
                 {               
                     string jsonText = File.ReadAllText(file);
-                    var component = JsonSerializer.Deserialize<Videocard.GPU>(jsonText);
+                    var component = JsonSerializer.Deserialize<Videocard.GPU>(jsonText); //создание обьекта (видеокарты) класса Videocard.GPU, содержащую  в себе jsonText
+
+                    //доп проверка на пустоту
                     if (component != null)
                         ComponentsGPU.Add(component);
                 }
@@ -66,16 +70,7 @@ namespace CatalogPC.Models
                 }
             }
         }
-        //список параметров по которым судить совместимоть комплектующих
 
-        //модель и сокет процессора
-        //поддержка поколения и сокета процессора материнской платой
-        //поддержка частоты и DDR оперативной памяти материнской платой
-
-        // List<Component> components = new List<Component>();
-        //List<Processor> processors = new List<Processor>();
-        //List<Motherboard> motherboards = new List<Motherboard>();
-        //List<RAM> rams = new List<RAM>();
         public abstract class Component
         {
             public string Name { get; set; }
@@ -89,7 +84,7 @@ namespace CatalogPC.Models
 
         public List<Component> ComponentsRAM = new List<Component>();
 
-        public List<Component> SuitableComponents = new List<Component>();
+        public List<Component> SuitableComponents = new List<Component>(); // это общий список всех комплектующих
 
         
     }

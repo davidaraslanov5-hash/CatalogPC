@@ -80,6 +80,7 @@ namespace CatalogPC.Services
                 if (component is Videocard.GPU gpu)
                 {
                     var name = Name ?? string.Empty;
+                    var Score = gpu.IndexPower.RawScore;
                     string gpuName = gpu.Metadata?.Name ?? string.Empty;
                     string gpuInterface = gpu.Interface ?? string.Empty;
 
@@ -90,7 +91,15 @@ namespace CatalogPC.Services
                         || gpuInterface.Contains(Name, StringComparison.OrdinalIgnoreCase)
                         || result >= 88 
                         || result_2 >= 80)
-                    modelOne.SuitableComponents.Add(component);
+                        if (Score != 0)
+                        {
+                            modelOne.SuitableComponents.Insert(0, component);
+                        }
+                        else
+                        {
+                            modelOne.SuitableComponents.Add(component);
+                        }
+
 
                 }
             }

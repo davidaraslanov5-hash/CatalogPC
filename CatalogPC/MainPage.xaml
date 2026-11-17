@@ -69,7 +69,7 @@
                     <Label Style="{StaticResource CardLabel}" Text="{Binding MemoryType, StringFormat='Тип памяти: {0}'}"/>
 
                     <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
-                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding IndexPower.RawScore}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding IndexPower.Score , StringFormat='Индекс мощности: {0}'}" TextColor="Green"/>
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Tdp, StringFormat='TDP: {0}W'}" />
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding MemoryBus, StringFormat='Шина памяти: {0}'}" />
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Interface, StringFormat='Интерфейс: {0}'}" />
@@ -134,6 +134,7 @@
                     Placeholder="Введите запрос..."
                     PlaceholderColor="Gray"
                     Text="{Binding NameFile, Mode=TwoWay}"
+                    ReturnCommand="{Binding TestCommand}"
                 ></Entry>
                 <RadioButton
                     WidthRequest="120"
@@ -251,11 +252,14 @@
                 Background="OrangeRed"
                 Command="{Binding CompatibilityTestCommand}"
                 ></Button>
+                
+                
+                
             </HorizontalStackLayout>
         </Grid>
         <VerticalStackLayout>
             <CollectionView
-                HeightRequest="700"
+                HeightRequest="900"
                 Grid.Row="2"
                 SelectionMode="Single"
                 SelectionChangedCommand="{Binding AddPartCommand}"

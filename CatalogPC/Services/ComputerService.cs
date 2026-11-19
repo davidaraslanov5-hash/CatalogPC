@@ -81,6 +81,8 @@ namespace CatalogPC.Services
             }
             if (SocketTrue && MemoryTrue)
             {
+                if (string.IsNullOrWhiteSpace(pc.board.FormFactor) != true)
+                    messages.Add($"Необходим корпус с размером {pc.board.FormFactor}");
                 messages.Add("Сборка совместима");
             }
 

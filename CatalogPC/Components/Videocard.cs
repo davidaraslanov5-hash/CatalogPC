@@ -24,7 +24,9 @@ namespace CatalogPC.Components
             [JsonPropertyName("core_boost_clock")] public int CoreBoost { get; set; }
             [JsonPropertyName("effective_memory_clock")] public int EffectiveMemoryClock { get; set; }
             [JsonPropertyName("memory")] public int Memory { get; set; }
-            [JsonPropertyName("memory_bus")] public int MemoryBus { get; set; }
+            [JsonPropertyName("memory_bus")] public int MemoryBus_ { get; set; }
+            public string MemoryBus => MemoryBus_ != 0 ? $"Шина памяти: {MemoryBus_}" : $"Нет данных о шине памяти";
+
             [JsonPropertyName("memory_type")] public string MemoryType { get; set; }
 
             [JsonPropertyName("interface")] public string Interface { get; set; }
@@ -45,7 +47,8 @@ namespace CatalogPC.Components
         public class Meta
         {
             [JsonPropertyName("name")] public string Name { get; set; }
-            [JsonPropertyName("releaseYear")] public int? ReleaseYear { get; set; }
+            [JsonPropertyName("releaseYear")] public int? ReleaseYear_ { get; set; }
+            public string ReleaseYear => ReleaseYear_ != null ? $"Год выпуска: {ReleaseYear_}" : "Неизвестный год выпуска";
         }
 
         public class GPUInfo
@@ -92,19 +95,16 @@ namespace CatalogPC.Components
             }
 
             public double TFLOPS => (_gpu.CoreCount * _gpu.CoreBoost * 2.0) / 1_000_000.0; // делим на миллион потому что нужно получить очень маленькое число (в размере 15+-)
-
-            public int Score
+            public string Score
             {
                 get
                 {
                     if (RawScore <= 0)
-                        return 0;
+                        return "Индекс мощности: Нет данных";
                     double ratio = RawScore / MaxReferenceScore;
                     // Степень 0.55 сглаживает отрыв ультра-флагманов, чтобы карты среднего класса получали адекватные 45-65 баллов вместо 20
                     double finalScore = Math.Pow(ratio, 0.55) * 100;
-
-
-                    return Math.Clamp((int)finalScore, 1, 100); //ужимаем наш ответ в 1 / 100 чтобы было понятнее
+                    return $"Индекс мощности: {Math.Clamp((int)finalScore, 1, 100)}"; //ужимаем наш ответ в 1 / 100 чтобы было понятнее
                 }
             }
 
@@ -134,7 +134,7 @@ namespace CatalogPC.Components
                 }
             }
 
-            public double Bandwidth => (EffectiveMemoryClock * _gpu.MemoryBus) / 8000.0; //пропускная способность, могли бы поделить сначала на 8 (перевести биты в байты), а потом на 1000 (MB\s в GB\s)
+            public double Bandwidth => (EffectiveMemoryClock * _gpu.MemoryBus_) / 8000.0; //пропускная способность, могли бы поделить сначала на 8 (перевести биты в байты), а потом на 1000 (MB\s в GB\s)
             public double RawScore => CaclulateRawScore(TFLOPS, ArchitectureMultiplier(_gpu.Chipset), Bandwidth, _gpu.Memory);
 
             //второй параметр это балл за чипсет, чем новее тем больше балл

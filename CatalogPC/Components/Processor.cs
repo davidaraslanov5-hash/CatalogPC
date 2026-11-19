@@ -52,18 +52,23 @@ namespace CatalogPC.Components
 
             [JsonPropertyName("integratedGraphics")] public IntegratedGraphics Graphics { get; set; }
             [JsonPropertyName("eccSupport")] public bool ECCMemorySupport { get; set; }
-            
+            public string ECCMemorySupportLabel => ECCMemorySupport != false ? $"Поддержка серверной памяти" : "Не поддерживает серверную память";
         }
 
         public class IntegratedGraphics
         {
             [JsonPropertyName("model")] public string GraphicsCore { get; set; }
+            public string GraphicsCoreLabel => GraphicsCore != "None" ? $"Графическое ядро: {GraphicsCore}" : "Нет встроенного графического ядра";
+
         }
 
         public class CpuMemory
         {
-            [JsonIgnore]
-            public string MemoryTypes => Types != null ? string.Join(", ", Types) : "Не указано";
+            public string MemoryTypes => Types.Count != 0 ? string.Join(", ", Types) : "Не указано";
+
+            [JsonPropertyName("maxSupport")] public int? MaxRAM { get; set; }
+            public string MaxRAMLabel => MaxRAM != null ? $"{MaxRAM}GB" : "Не указано";
+
             [JsonPropertyName("types")] public List<string> Types { get; set; }
             //public string MemoryType = ($"Types {Types[0]} ");
         }

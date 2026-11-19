@@ -14,6 +14,8 @@ namespace CatalogPC.Components
             [JsonPropertyName("ram_type")] public string MemoryType { get; set; }
             [JsonPropertyName("metadata")] public Meta Metadata { get; set; }
             [JsonPropertyName("ecc")] public string EccFormat { get; set; }
+
+            public string EccFormatLabel => EccFormat != "Non-ECC" ? $"Серверная память" : "Стандартная память";
             [JsonPropertyName("modules")] public Module Module { get; set; } 
         }
         public class Module

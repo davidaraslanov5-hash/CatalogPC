@@ -63,10 +63,10 @@ namespace CatalogPC.Services
                         messages.Add($"Память не подходит к плате по типу");
                         MemoryTrue = false;
                     }
-                    if (TotalRAM_GB > pc.board.Memory.Max) //Озу не слишком много?
+                    if (TotalRAM_GB > pc.board.Memory.Max && TotalRAM_GB > pc.CPU.Specs.Memory.MaxRAM) //Озу не слишком много?
                     {
                         Debug.WriteLine($"Память не подходит к плате по обьему {TotalRAM_GB}GB у ОЗУ vs {pc.board.Memory.Max}GB у платы");
-                        messages.Add($"Память не подходит к плате по обьему");
+                        messages.Add($"Память не подходит по обьему");
                         MemoryTrue = false;
                     }
                     if (MemoryTrue == false) break;

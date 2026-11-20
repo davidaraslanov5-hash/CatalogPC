@@ -70,6 +70,7 @@
                     <Label Style="{StaticResource CardLabel}" Text="{Binding MemoryType, StringFormat='Тип памяти: {0}'}"/>
 
                     <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Chipset}" TextColor="Green"/>
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding IndexPower.Score}" TextColor="Green"/>
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Tdp, StringFormat='TDP: {0}W'}" />
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding MemoryBusLabel}" />
@@ -91,8 +92,8 @@
                     
                     
                     <VerticalStackLayout IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ViewModelOne}}, Path=AdvancedInfo}">
-                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Memory.Max, StringFormat='Максимум ОЗУ: {0}GB'}"/>
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Chipset, StringFormat='Чипсет: {0}'}" />
+                        <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding Memory.Max, StringFormat='Максимум ОЗУ: {0}GB'}"/>
                         <Label Style="{StaticResource AdvancedInfoLabel}" Text="{Binding FormFactor, StringFormat='Формат: {0}'}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>

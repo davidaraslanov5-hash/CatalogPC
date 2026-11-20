@@ -79,12 +79,14 @@ namespace CatalogPC.Services
             {
                 if (component is Videocard.GPU gpu)
                 {
+
                     var name = Name ?? string.Empty;
                     var Score = gpu.IndexPower.RawScore;
+                    string gpuChipset = gpu.Chipset ?? string.Empty;
                     string gpuName = gpu.Metadata?.Name ?? string.Empty;
                     string gpuInterface = gpu.Interface ?? string.Empty;
 
-                    var result = Fuzz.PartialRatio(Name ?? string.Empty, gpuName);
+                    var result = Fuzz.PartialRatio(Name ?? string.Empty, gpuChipset);
                     var result_2 = Fuzz.PartialRatio(Name ?? string.Empty, gpuInterface);
                     
                     if (gpuName.Contains(Name, StringComparison.OrdinalIgnoreCase)
